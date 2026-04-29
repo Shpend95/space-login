@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ORBITAL COMMAND — Dashboard</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#020b18; font-family:'Courier New',monospace; color:#c0e8ff; min-height:100vh; }
+
+    /* Nav */
+    nav {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 40px;
+      background:rgba(0,20,45,0.9);
+      border-bottom:1px solid rgba(0,200,255,0.12);
+      position:sticky; top:0; z-index:50;
+    }
+    .nav-brand { display:flex; align-items:center; gap:10px; font-size:16px; letter-spacing:4px; color:#00c8ff; }
+    .nav-links { display:flex; gap:8px; }
+    .nav-links a {
+      padding:8px 18px; border-radius:6px; font-size:11px; letter-spacing:3px;
+      color:rgba(0,200,255,0.6); text-decoration:none;
+      border:1px solid transparent; transition:all 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color:#00c8ff; border-color:rgba(0,200,255,0.3);
+      background:rgba(0,200,255,0.07);
+    }
+    .nav-right { display:flex; align-items:center; gap:16px; font-size:11px; letter-spacing:2px; color:rgba(0,200,255,0.4); }
+    .logout-btn {
+      padding:7px 16px; border-radius:6px; font-size:11px; letter-spacing:2px;
+      color:#ff4d6d; border:1px solid rgba(255,77,109,0.3); background:none;
+      cursor:pointer; font-family:'Courier New',monospace; transition:all 0.2s;
+    }
+    .logout-btn:hover { background:rgba(255,77,109,0.1); }
+
+    /* Main */
+    main { max-width:1100px; margin:0 auto; padding:50px 24px; }
+
+    .welcome {
+      margin-bottom:48px;
+    }
+    .welcome h2 { font-size:26px; letter-spacing:5px; color:#00c8ff; text-transform:uppercase; }
+    .welcome p  { margin-top:8px; font-size:12px; letter-spacing:2px; color:rgba(0,200,255,0.4); }
+
+    /* Stats row */
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:48px; }
+    .stat-card {
+      background:rgba(0,20,45,0.7); border:1px solid rgba(0,200,255,0.12);
+      border-radius:12px; padding:28px 24px; text-align:center;
+    }
+    .stat-card .icon { font-size:32px; margin-bottom:12px; }
+    .stat-card .value { font-size:28px; color:#00c8ff; letter-spacing:3px; }
+    .stat-card .label { font-size:10px; letter-spacing:3px; color:rgba(0,200,255,0.4); margin-top:6px; }
+
+    /* Menu cards */
+    .menu-title { font-size:11px; letter-spacing:4px; color:rgba(0,200,255,0.4); margin-bottom:20px; }
+    .menu { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+    .menu-card {
+      background:rgba(0,20,45,0.7); border:1px solid rgba(0,200,255,0.12);
+      border-radius:14px; padding:36px 28px;
+      text-decoration:none; color:inherit;
+      transition:all 0.25s; cursor:pointer; display:block;
+    }
+    .menu-card:hover {
+      border-color:rgba(0,200,255,0.4);
+      background:rgba(0,30,60,0.85);
+      transform:translateY(-3px);
+      box-shadow:0 8px 30px rgba(0,150,255,0.1);
+    }
+    .menu-card .card-icon { font-size:40px; margin-bottom:16px; }
+    .menu-card h3 { font-size:14px; letter-spacing:4px; color:#00c8ff; margin-bottom:8px; text-transform:uppercase; }
+    .menu-card p  { font-size:11px; letter-spacing:1px; color:rgba(0,200,255,0.45); line-height:1.7; }
+
+    .footer { text-align:center; margin-top:60px; font-size:10px; letter-spacing:2px; color:rgba(0,200,255,0.15); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">🛸 ORBITAL COMMAND</div>
+  <div class="nav-links">
+    <a href="dashboard.html" class="active">DASHBOARD</a>
+    <a href="profile.html">PROFILE</a>
+    <a href="shop.html">TELESCOPE SHOP</a>
+  </div>
+  <div class="nav-right">
+    <span id="navUser"></span>
+    <button class="logout-btn" onclick="logout()">LOGOUT</button>
+  </div>
+</nav>
+
+<main>
+  <div class="welcome">
+    <h2>WELCOME BACK, <span id="commanderName">COMMANDER</span></h2>
+    <p>ALL SYSTEMS NOMINAL — MISSION STATUS: ACTIVE</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="icon">🌌</div>
+      <div class="value">247</div>
+      <div class="label">MISSIONS LOGGED</div>
+    </div>
+    <div class="stat-card">
+      <div class="icon">🔭</div>
+      <div class="value" id="cartCount">0</div>
+      <div class="label">TELESCOPES IN CART</div>
+    </div>
+    <div class="stat-card">
+      <div class="icon">⭐</div>
+      <div class="value">ALPHA</div>
+      <div class="label">CLEARANCE LEVEL</div>
+    </div>
+  </div>
+
+  <p class="menu-title">COMMAND MODULES</p>
+  <div class="menu">
+    <a class="menu-card" href="profile.html">
+      <div class="card-icon">👨‍🚀</div>
+      <h3>Commander Profile</h3>
+      <p>Update your callsign, personal details, and mission preferences.</p>
+    </a>
+    <a class="menu-card" href="shop.html">
+      <div class="card-icon">🔭</div>
+      <h3>Telescope Shop</h3>
+      <p>Browse and purchase high-powered telescopes for deep space observation.</p>
+    </a>
+    <a class="menu-card" href="#">
+      <div class="card-icon">🗺️</div>
+      <h3>Star Map</h3>
+      <p>Interactive real-time star map — track constellations and celestial events.</p>
+    </a>
+    <a class="menu-card" href="#">
+      <div class="card-icon">📡</div>
+      <h3>Mission Logs</h3>
+      <p>Review your observation history and filed mission reports.</p>
+    </a>
+  </div>
+
+  <div class="footer">ORBITAL COMMAND STATION — CLEARANCE LEVEL ALPHA — &copy; 2026</div>
+</main>
+
+<script>
+  const commander = localStorage.getItem('commander');
+  if (!commander) window.location.href = 'index.html';
+
+  document.getElementById('commanderName').textContent = commander.toUpperCase();
+  document.getElementById('navUser').textContent = commander.toUpperCase();
+
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  document.getElementById('cartCount').textContent = cart.length;
+
+  function logout() {
+    localStorage.removeItem('commander');
+    window.location.href = 'index.html';
+  }
+</script>
+</body>
+</html>

@@ -375,8 +375,10 @@
     setTimeout(() => {
       if (USERS[username] && USERS[username] === password) {
         showMessage('IDENTITY VERIFIED — LAUNCHING...', 'success');
+        localStorage.setItem('commander', username);
         setTimeout(() => {
           document.getElementById('overlay').classList.add('show');
+          setTimeout(() => { window.location.href = 'dashboard.html'; }, 1800);
         }, 800);
       } else {
         btn.textContent = 'INITIATE ACCESS';
