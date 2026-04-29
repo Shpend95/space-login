@@ -8,148 +8,108 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body{
-      background:#060918;
+      background:#f1f5f9;
       font-family:'Inter',sans-serif;
       height:100vh;overflow:hidden;
       display:flex;align-items:center;justify-content:center;
     }
 
-    /* ── Background ── */
-    canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;}
+    .bg-orb{position:fixed;border-radius:50%;filter:blur(80px);z-index:0;pointer-events:none;}
+    .orb1{width:600px;height:600px;background:rgba(124,58,237,0.08);top:-200px;right:-100px;}
+    .orb2{width:500px;height:500px;background:rgba(14,165,233,0.07);bottom:-150px;left:-100px;}
+    .orb3{width:300px;height:300px;background:rgba(236,72,153,0.05);top:50%;left:50%;transform:translate(-50%,-50%);}
 
-    .bg-orb{
-      position:fixed;border-radius:50%;filter:blur(80px);z-index:0;pointer-events:none;
-    }
-    .orb1{width:600px;height:600px;background:rgba(124,58,237,0.15);top:-200px;right:-100px;}
-    .orb2{width:500px;height:500px;background:rgba(14,165,233,0.12);bottom:-150px;left:-100px;}
-    .orb3{width:300px;height:300px;background:rgba(236,72,153,0.08);top:50%;left:50%;transform:translate(-50%,-50%);}
-
-    /* ── Card ── */
     .card{
       position:relative;z-index:10;width:440px;
-      background:rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.08);
+      background:#ffffff;
+      border:1px solid rgba(0,0,0,0.07);
       border-radius:24px;padding:48px 44px 44px;
-      backdrop-filter:blur(24px);
-      box-shadow:0 32px 80px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.06);
+      box-shadow:0 20px 60px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04);
     }
 
-    /* ── Header ── */
     .logo{display:flex;align-items:center;gap:12px;margin-bottom:36px;}
     .logo-icon{
       width:44px;height:44px;border-radius:12px;
       background:linear-gradient(135deg,#7c3aed,#2563eb);
       display:flex;align-items:center;justify-content:center;font-size:22px;
-      box-shadow:0 8px 24px rgba(124,58,237,0.4);
+      box-shadow:0 8px 24px rgba(124,58,237,0.3);
     }
-    .logo-text h1{font-size:17px;font-weight:700;color:#f1f5f9;letter-spacing:0.5px;}
-    .logo-text p{font-size:12px;color:rgba(148,163,184,0.7);margin-top:2px;}
+    .logo-text h1{font-size:17px;font-weight:700;color:#0f172a;letter-spacing:0.3px;}
+    .logo-text p{font-size:12px;color:#94a3b8;margin-top:2px;}
 
     .badge{
       display:inline-flex;align-items:center;gap:6px;
-      background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);
+      background:#f0fdf4;border:1px solid #bbf7d0;
       border-radius:20px;padding:5px 12px;margin-bottom:28px;
     }
     .badge-dot{width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 6px #10b981;animation:pulse 2s infinite;}
-    .badge span{font-size:11px;font-weight:500;color:#10b981;letter-spacing:0.5px;}
-
+    .badge span{font-size:11px;font-weight:500;color:#059669;}
     @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
 
-    h2{font-size:24px;font-weight:700;color:#f1f5f9;margin-bottom:6px;}
-    .subtitle{font-size:14px;color:rgba(148,163,184,0.6);margin-bottom:32px;}
+    h2{font-size:24px;font-weight:700;color:#0f172a;margin-bottom:6px;}
+    .subtitle{font-size:14px;color:#94a3b8;margin-bottom:32px;}
 
-    /* ── Fields ── */
-    .field{margin-bottom:18px;position:relative;}
-    label{display:block;font-size:12px;font-weight:500;color:rgba(148,163,184,0.8);margin-bottom:7px;}
-
+    .field{margin-bottom:18px;}
+    label{display:block;font-size:12px;font-weight:500;color:#64748b;margin-bottom:7px;}
     .input-wrap{position:relative;}
     input{
-      width:100%;
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.08);
+      width:100%;background:#f8fafc;border:1px solid #e2e8f0;
       border-radius:12px;padding:13px 44px 13px 16px;
-      color:#f1f5f9;font-family:'Inter',sans-serif;font-size:14px;
+      color:#0f172a;font-family:'Inter',sans-serif;font-size:14px;
       outline:none;transition:all 0.2s;
     }
-    input:focus{border-color:rgba(124,58,237,0.6);background:rgba(124,58,237,0.06);box-shadow:0 0 0 3px rgba(124,58,237,0.12);}
-    input::placeholder{color:rgba(100,116,139,0.5);}
+    input:focus{border-color:#7c3aed;background:#fff;box-shadow:0 0 0 3px rgba(124,58,237,0.1);}
+    input::placeholder{color:#cbd5e1;}
+    .input-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:16px;cursor:pointer;}
+    .input-icon:hover{color:#64748b;}
 
-    .input-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:rgba(100,116,139,0.5);font-size:16px;cursor:pointer;user-select:none;}
-    .input-icon:hover{color:rgba(148,163,184,0.8);}
-
-    /* ── Options row ── */
     .options{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
     .remember{display:flex;align-items:center;gap:8px;cursor:pointer;}
-    .remember input[type=checkbox]{
-      width:16px;height:16px;border-radius:4px;accent-color:#7c3aed;cursor:pointer;padding:0;
-    }
-    .remember span{font-size:13px;color:rgba(148,163,184,0.7);}
-    .forgot{font-size:13px;color:#a78bfa;text-decoration:none;transition:color 0.2s;}
-    .forgot:hover{color:#c4b5fd;}
+    .remember input[type=checkbox]{width:16px;height:16px;accent-color:#7c3aed;cursor:pointer;padding:0;}
+    .remember span{font-size:13px;color:#64748b;}
+    .forgot{font-size:13px;color:#7c3aed;text-decoration:none;font-weight:500;transition:color 0.2s;}
+    .forgot:hover{color:#6d28d9;}
 
-    /* ── Button ── */
     .btn{
       width:100%;padding:14px;border-radius:12px;
       background:linear-gradient(135deg,#7c3aed,#2563eb);
       border:none;color:#fff;font-family:'Inter',sans-serif;
-      font-size:14px;font-weight:600;letter-spacing:0.3px;
-      cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;
+      font-size:14px;font-weight:600;cursor:pointer;transition:all 0.3s;
     }
-    .btn::before{
-      content:'';position:absolute;inset:0;
-      background:linear-gradient(135deg,#6d28d9,#1d4ed8);
-      opacity:0;transition:opacity 0.3s;
-    }
-    .btn:hover::before{opacity:1;}
-    .btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,58,237,0.4);}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,58,237,0.35);}
     .btn:active{transform:translateY(0);}
-    .btn span{position:relative;z-index:1;}
-    .btn.loading{pointer-events:none;opacity:0.8;}
+    .btn.loading{pointer-events:none;opacity:0.7;}
 
-    /* ── Message ── */
     .message{margin-top:16px;font-size:13px;text-align:center;min-height:16px;}
-    .message.error{color:#f87171;}
-    .message.success{color:#34d399;}
+    .message.error{color:#ef4444;}
+    .message.success{color:#10b981;}
 
-    /* ── Divider ── */
     .divider{display:flex;align-items:center;gap:12px;margin:24px 0;}
-    .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06);}
-    .divider span{font-size:12px;color:rgba(100,116,139,0.5);}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:#e2e8f0;}
+    .divider span{font-size:12px;color:#94a3b8;}
 
-    /* ── Demo credentials ── */
-    .demo{
-      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
-      border-radius:12px;padding:14px 16px;
-    }
-    .demo p{font-size:11px;color:rgba(100,116,139,0.6);margin-bottom:8px;font-weight:500;letter-spacing:0.3px;}
+    .demo{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;}
+    .demo p{font-size:11px;color:#94a3b8;margin-bottom:8px;font-weight:600;letter-spacing:0.3px;text-transform:uppercase;}
     .demo-creds{display:flex;gap:8px;flex-wrap:wrap;}
     .cred-chip{
-      font-size:11px;color:rgba(167,139,250,0.8);
-      background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);
-      border-radius:6px;padding:3px 9px;cursor:pointer;transition:all 0.2s;
+      font-size:11px;color:#7c3aed;background:#ede9fe;border:1px solid #ddd6fe;
+      border-radius:6px;padding:3px 10px;cursor:pointer;font-weight:500;transition:all 0.2s;
     }
-    .cred-chip:hover{background:rgba(124,58,237,0.2);color:#c4b5fd;}
+    .cred-chip:hover{background:#ddd6fe;}
 
-    /* ── Success overlay ── */
     .overlay{
-      position:fixed;inset:0;z-index:100;
-      background:rgba(6,9,24,0.96);
+      position:fixed;inset:0;z-index:100;background:rgba(241,245,249,0.97);
       display:flex;flex-direction:column;align-items:center;justify-content:center;
       opacity:0;pointer-events:none;transition:opacity 0.5s;
     }
     .overlay.show{opacity:1;pointer-events:all;}
     .overlay-icon{font-size:64px;animation:launch 1.5s ease-in forwards;}
-    .overlay h2{font-size:26px;font-weight:700;color:#a78bfa;margin-top:20px;}
-    .overlay p{font-size:14px;color:rgba(148,163,184,0.5);margin-top:8px;}
-
-    @keyframes launch{
-      0%{transform:translateY(0) rotate(-45deg);opacity:1;}
-      100%{transform:translateY(-220px) rotate(-45deg);opacity:0;}
-    }
+    .overlay h2{font-size:26px;font-weight:700;color:#7c3aed;margin-top:20px;}
+    .overlay p{font-size:14px;color:#94a3b8;margin-top:8px;}
+    @keyframes launch{0%{transform:translateY(0) rotate(-45deg);opacity:1;}100%{transform:translateY(-220px) rotate(-45deg);opacity:0;}}
   </style>
 </head>
 <body>
-<canvas id="stars"></canvas>
 <div class="bg-orb orb1"></div>
 <div class="bg-orb orb2"></div>
 <div class="bg-orb orb3"></div>
@@ -179,11 +139,10 @@
     <div class="field">
       <label>Access Code</label>
       <div class="input-wrap">
-        <input type="password" id="password" placeholder="••••••••" id="password"/>
+        <input type="password" id="password" placeholder="••••••••"/>
         <span class="input-icon" onclick="togglePassword(this)">👁</span>
       </div>
     </div>
-
     <div class="options">
       <label class="remember">
         <input type="checkbox" id="rememberMe"/>
@@ -191,15 +150,13 @@
       </label>
       <a href="#" class="forgot">Forgot code?</a>
     </div>
-
     <button class="btn" type="submit" id="loginBtn"><span id="btnText">Sign In</span></button>
     <div class="message" id="message"></div>
   </form>
 
   <div class="divider"><span>Quick access</span></div>
-
   <div class="demo">
-    <p>DEMO CREDENTIALS — CLICK TO FILL</p>
+    <p>Demo Credentials — Click to fill</p>
     <div class="demo-creds">
       <div class="cred-chip" onclick="fillCreds('commander','orbit2026')">commander</div>
       <div class="cred-chip" onclick="fillCreds('admin','launch123')">admin</div>
@@ -215,58 +172,30 @@
 </div>
 
 <script>
-  /* Starfield */
-  const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');
-  let stars=[];
-  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
-  function initStars(){stars=[];for(let i=0;i<180;i++)stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.4+0.2,alpha:Math.random(),d:Math.random()*0.015+0.003});}
-  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);stars.forEach(s=>{s.alpha+=s.d*(Math.random()>.5?1:-1);s.alpha=Math.max(0.05,Math.min(1,s.alpha));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(200,210,255,${s.alpha})`;ctx.fill();});requestAnimationFrame(draw);}
-  window.addEventListener('resize',()=>{resize();initStars();});
-  resize();initStars();draw();
-
-  /* Check remember me */
   const saved=localStorage.getItem('rememberedUser');
   if(saved){document.getElementById('username').value=saved;document.getElementById('rememberMe').checked=true;}
-
   const USERS={'commander':'orbit2026','admin':'launch123','shpend':'aetrex2026'};
 
-  function fillCreds(u,p){
-    document.getElementById('username').value=u;
-    document.getElementById('password').value=p;
-  }
-
-  function togglePassword(el){
-    const inp=el.previousElementSibling;
-    inp.type=inp.type==='password'?'text':'password';
-    el.textContent=inp.type==='password'?'👁':'🙈';
-  }
+  function fillCreds(u,p){document.getElementById('username').value=u;document.getElementById('password').value=p;}
+  function togglePassword(el){const i=el.previousElementSibling;i.type=i.type==='password'?'text':'password';el.textContent=i.type==='password'?'👁':'🙈';}
 
   function handleLogin(e){
     e.preventDefault();
     const u=document.getElementById('username').value.trim().toLowerCase();
     const p=document.getElementById('password').value;
     const btn=document.getElementById('loginBtn');
-    const msg=document.getElementById('message');
-
     if(!u||!p){showMsg('Commander ID and access code are required','error');return;}
-
-    btn.classList.add('loading');
-    document.getElementById('btnText').textContent='Authenticating...';
-    msg.className='message';msg.textContent='';
-
+    btn.classList.add('loading');document.getElementById('btnText').textContent='Authenticating...';
+    document.getElementById('message').className='message';
     setTimeout(()=>{
       if(USERS[u]&&USERS[u]===p){
         if(document.getElementById('rememberMe').checked)localStorage.setItem('rememberedUser',u);
         else localStorage.removeItem('rememberedUser');
         localStorage.setItem('commander',u);
         showMsg('Identity verified — launching...','success');
-        setTimeout(()=>{
-          document.getElementById('overlay').classList.add('show');
-          setTimeout(()=>window.location.href='dashboard.html',1800);
-        },600);
+        setTimeout(()=>{document.getElementById('overlay').classList.add('show');setTimeout(()=>window.location.href='dashboard.html',1800);},600);
       } else {
-        btn.classList.remove('loading');
-        document.getElementById('btnText').textContent='Sign In';
+        btn.classList.remove('loading');document.getElementById('btnText').textContent='Sign In';
         showMsg('Invalid credentials — access denied','error');
         shake(document.querySelector('.card'));
       }
@@ -274,11 +203,7 @@
   }
 
   function showMsg(t,type){const m=document.getElementById('message');m.textContent=t;m.className='message '+type;}
-
-  function shake(el){
-    let i=0;
-    const iv=setInterval(()=>{el.style.transform=`translateX(${i%2===0?-6:6}px)`;if(++i>8){clearInterval(iv);el.style.transform='';}},50);
-  }
+  function shake(el){let i=0;const iv=setInterval(()=>{el.style.transform=`translateX(${i%2===0?-6:6}px)`;if(++i>8){clearInterval(iv);el.style.transform='';}},50);}
 </script>
 </body>
 </html>

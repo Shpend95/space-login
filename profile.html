@@ -7,124 +7,76 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{background:#060918;font-family:'Inter',sans-serif;color:#e2e8f0;min-height:100vh;}
+    body{background:#f1f5f9;font-family:'Inter',sans-serif;color:#0f172a;min-height:100vh;}
     .bg-orb{position:fixed;border-radius:50%;filter:blur(100px);z-index:0;pointer-events:none;}
-    .orb1{width:600px;height:600px;background:rgba(124,58,237,0.1);top:-200px;right:-150px;}
-    .orb2{width:400px;height:400px;background:rgba(14,165,233,0.08);bottom:-100px;left:-100px;}
+    .orb1{width:600px;height:600px;background:rgba(124,58,237,0.06);top:-200px;right:-150px;}
 
-    nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:rgba(6,9,24,0.8);border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:50;backdrop-filter:blur(20px);}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:50;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
     .nav-brand{display:flex;align-items:center;gap:10px;}
     .nav-brand-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#2563eb);display:flex;align-items:center;justify-content:center;font-size:16px;}
-    .nav-brand span{font-size:15px;font-weight:700;color:#f1f5f9;}
+    .nav-brand span{font-size:15px;font-weight:700;color:#0f172a;}
     .nav-links{display:flex;gap:4px;}
-    .nav-links a{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:rgba(148,163,184,0.7);text-decoration:none;transition:all 0.2s;}
-    .nav-links a:hover{color:#f1f5f9;background:rgba(255,255,255,0.06);}
-    .nav-links a.active{color:#a78bfa;background:rgba(124,58,237,0.12);}
+    .nav-links a{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:#64748b;text-decoration:none;transition:all 0.2s;}
+    .nav-links a:hover{color:#0f172a;background:#f1f5f9;}
+    .nav-links a.active{color:#7c3aed;background:#ede9fe;}
     .nav-right{display:flex;align-items:center;gap:12px;}
-    .nav-user{display:flex;align-items:center;gap:8px;}
     .avatar-sm{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#2563eb);display:flex;align-items:center;justify-content:center;font-size:14px;}
-    .nav-name{font-size:13px;font-weight:500;color:#f1f5f9;}
-    .logout-btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:#f87171;background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.15);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
-    .logout-btn:hover{background:rgba(248,113,113,0.15);}
+    .nav-name{font-size:13px;font-weight:500;color:#0f172a;}
+    .logout-btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:#ef4444;background:#fef2f2;border:1px solid #fecaca;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+    .logout-btn:hover{background:#fee2e2;}
 
     main{max-width:860px;margin:0 auto;padding:48px 40px;position:relative;z-index:1;}
-
     .page-header{margin-bottom:36px;}
-    .page-header h2{font-size:26px;font-weight:700;color:#f1f5f9;}
-    .page-header p{font-size:14px;color:rgba(148,163,184,0.55);margin-top:6px;}
+    .page-header h2{font-size:26px;font-weight:700;color:#0f172a;}
+    .page-header p{font-size:14px;color:#94a3b8;margin-top:6px;}
 
     .profile-layout{display:grid;grid-template-columns:260px 1fr;gap:24px;}
 
-    /* ── Left panel ── */
     .left-panel{display:flex;flex-direction:column;gap:16px;}
-    .avatar-card{
-      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
-      border-radius:20px;padding:28px 24px;text-align:center;
-    }
-    .avatar-circle{
-      width:80px;height:80px;border-radius:20px;margin:0 auto 16px;
-      background:linear-gradient(135deg,#7c3aed,#2563eb);
-      display:flex;align-items:center;justify-content:center;
-      font-size:38px;cursor:pointer;transition:transform 0.2s;
-      box-shadow:0 8px 24px rgba(124,58,237,0.35);
-    }
+    .avatar-card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:28px 24px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+    .avatar-circle{width:80px;height:80px;border-radius:20px;margin:0 auto 16px;background:linear-gradient(135deg,#7c3aed,#2563eb);display:flex;align-items:center;justify-content:center;font-size:38px;cursor:pointer;transition:transform 0.2s;box-shadow:0 8px 24px rgba(124,58,237,0.25);}
     .avatar-circle:hover{transform:scale(1.05);}
-    .avatar-name{font-size:16px;font-weight:700;color:#f1f5f9;margin-bottom:4px;}
-    .avatar-callsign{font-size:12px;color:#a78bfa;}
-    .avatar-badge{
-      display:inline-block;margin-top:10px;padding:4px 12px;border-radius:20px;
-      font-size:11px;font-weight:600;background:rgba(16,185,129,0.12);
-      border:1px solid rgba(16,185,129,0.25);color:#10b981;
-    }
+    .avatar-name{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:4px;}
+    .avatar-callsign{font-size:12px;color:#7c3aed;font-weight:500;}
+    .avatar-badge{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:#d1fae5;border:1px solid #a7f3d0;color:#059669;}
 
-    /* Avatar picker */
-    .emoji-picker{
-      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
-      border-radius:16px;padding:16px;
-    }
-    .emoji-picker p{font-size:11px;font-weight:600;color:rgba(148,163,184,0.5);letter-spacing:0.5px;margin-bottom:10px;text-transform:uppercase;}
+    .emoji-picker{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.03);}
+    .emoji-picker p{font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:0.5px;margin-bottom:10px;text-transform:uppercase;}
     .emoji-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
-    .emoji-opt{
-      height:38px;border-radius:8px;background:rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;
-      justify-content:center;font-size:18px;cursor:pointer;transition:all 0.2s;
-    }
-    .emoji-opt:hover,.emoji-opt.selected{background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.35);}
+    .emoji-opt{height:38px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all 0.2s;}
+    .emoji-opt:hover,.emoji-opt.selected{background:#ede9fe;border-color:#c4b5fd;}
 
-    .stats-mini{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:16px;}
-    .stats-mini p{font-size:11px;font-weight:600;color:rgba(148,163,184,0.5);letter-spacing:0.5px;margin-bottom:12px;text-transform:uppercase;}
-    .mini-stat{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .stats-mini{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.03);}
+    .stats-mini p{font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:0.5px;margin-bottom:12px;text-transform:uppercase;}
+    .mini-stat{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f1f5f9;}
     .mini-stat:last-child{border-bottom:none;}
-    .mini-stat span:first-child{font-size:12px;color:rgba(148,163,184,0.6);}
-    .mini-stat span:last-child{font-size:13px;font-weight:600;color:#f1f5f9;}
+    .mini-stat span:first-child{font-size:12px;color:#64748b;}
+    .mini-stat span:last-child{font-size:13px;font-weight:600;color:#0f172a;}
 
-    /* ── Right panel ── */
-    .form-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:32px;}
-    .section-label{font-size:11px;font-weight:600;color:rgba(148,163,184,0.5);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.05);}
+    .form-card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:32px;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+    .section-label{font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid #f1f5f9;}
     .section-label:not(:first-child){margin-top:28px;}
-
     .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
     .field{margin-bottom:16px;}
-    label{display:block;font-size:12px;font-weight:500;color:rgba(148,163,184,0.7);margin-bottom:7px;}
-    input,select,textarea{
-      width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);
-      border-radius:10px;padding:11px 14px;color:#f1f5f9;
-      font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:all 0.2s;
-    }
-    input:focus,select:focus,textarea:focus{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.05);box-shadow:0 0 0 3px rgba(124,58,237,0.1);}
-    input::placeholder,textarea::placeholder{color:rgba(100,116,139,0.45);}
-    select option{background:#0d1224;}
+    label{display:block;font-size:12px;font-weight:500;color:#64748b;margin-bottom:7px;}
+    input,select,textarea{width:100%;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:11px 14px;color:#0f172a;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:all 0.2s;}
+    input:focus,select:focus,textarea:focus{border-color:#7c3aed;background:#fff;box-shadow:0 0 0 3px rgba(124,58,237,0.08);}
+    input::placeholder,textarea::placeholder{color:#cbd5e1;}
+    select option{background:#fff;}
     textarea{resize:vertical;min-height:80px;line-height:1.6;}
 
     .btn-row{display:flex;gap:10px;margin-top:24px;}
-    .btn-primary{
-      flex:1;padding:12px;border-radius:10px;
-      background:linear-gradient(135deg,#7c3aed,#2563eb);border:none;
-      color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
-      cursor:pointer;transition:all 0.3s;
-    }
-    .btn-primary:hover{opacity:0.9;box-shadow:0 6px 20px rgba(124,58,237,0.35);transform:translateY(-1px);}
-    .btn-secondary{
-      padding:12px 24px;border-radius:10px;background:rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.08);color:rgba(148,163,184,0.7);
-      font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;
-    }
-    .btn-secondary:hover{background:rgba(255,255,255,0.08);color:#f1f5f9;}
+    .btn-primary{flex:1;padding:12px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#2563eb);border:none;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s;}
+    .btn-primary:hover{opacity:0.9;box-shadow:0 6px 20px rgba(124,58,237,0.3);transform:translateY(-1px);}
+    .btn-secondary{padding:12px 24px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;color:#64748b;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;}
+    .btn-secondary:hover{background:#f1f5f9;color:#0f172a;}
 
-    .toast{
-      position:fixed;bottom:28px;right:28px;
-      background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);
-      border-radius:12px;padding:14px 20px;
-      font-size:13px;font-weight:500;color:#10b981;
-      display:flex;align-items:center;gap:8px;
-      transform:translateY(80px);opacity:0;transition:all 0.4s;z-index:999;
-    }
+    .toast{position:fixed;bottom:28px;right:28px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:14px 20px;font-size:13px;font-weight:500;color:#059669;display:flex;align-items:center;gap:8px;transform:translateY(80px);opacity:0;transition:all 0.4s;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.08);}
     .toast.show{transform:translateY(0);opacity:1;}
   </style>
 </head>
 <body>
 <div class="bg-orb orb1"></div>
-<div class="bg-orb orb2"></div>
 
 <nav>
   <div class="nav-brand">
@@ -137,7 +89,7 @@
     <a href="shop.html">Telescope Shop</a>
   </div>
   <div class="nav-right">
-    <div class="nav-user">
+    <div style="display:flex;align-items:center;gap:8px;">
       <div class="avatar-sm">👨‍🚀</div>
       <span class="nav-name" id="navUser"></span>
     </div>
@@ -152,20 +104,17 @@
   </div>
 
   <div class="profile-layout">
-    <!-- Left -->
     <div class="left-panel">
       <div class="avatar-card">
-        <div class="avatar-circle" id="avatarDisplay" onclick="document.querySelector('.emoji-picker').scrollIntoView({behavior:'smooth'})">👨‍🚀</div>
+        <div class="avatar-circle" id="avatarDisplay">👨‍🚀</div>
         <div class="avatar-name" id="displayName">Commander</div>
         <div class="avatar-callsign" id="displayCallsign">Callsign: —</div>
         <div class="avatar-badge">Alpha Clearance</div>
       </div>
-
       <div class="emoji-picker">
         <p>Choose Avatar</p>
         <div class="emoji-grid" id="emojiGrid"></div>
       </div>
-
       <div class="stats-mini">
         <p>Stats</p>
         <div class="mini-stat"><span>Missions</span><span>247</span></div>
@@ -175,7 +124,6 @@
       </div>
     </div>
 
-    <!-- Right -->
     <div class="form-card">
       <p class="section-label">Personal Information</p>
       <div class="row">
@@ -188,49 +136,36 @@
       <p class="section-label">Mission Settings</p>
       <div class="field"><label>Callsign</label><input type="text" id="callsign" placeholder="Your unique mission callsign"/></div>
       <div class="row">
-        <div class="field">
-          <label>Home Station</label>
+        <div class="field"><label>Home Station</label>
           <select id="station">
             <option value="">Select station</option>
-            <option value="ISS">International Space Station</option>
-            <option value="LUNA">Lunar Base Alpha</option>
-            <option value="MARS">Mars Outpost Ares</option>
-            <option value="DEEP">Deep Space Station 9</option>
-            <option value="EUROPA">Europa Research Base</option>
+            <option>International Space Station</option>
+            <option>Lunar Base Alpha</option>
+            <option>Mars Outpost Ares</option>
+            <option>Deep Space Station 9</option>
+            <option>Europa Research Base</option>
           </select>
         </div>
-        <div class="field">
-          <label>Specialty</label>
+        <div class="field"><label>Specialty</label>
           <select id="specialty">
             <option value="">Select specialty</option>
-            <option value="astro">Astrophysics</option>
-            <option value="nav">Navigation</option>
-            <option value="eng">Engineering</option>
-            <option value="bio">Astrobiology</option>
-            <option value="ops">Operations</option>
-            <option value="sec">Security</option>
+            <option>Astrophysics</option>
+            <option>Navigation</option>
+            <option>Engineering</option>
+            <option>Astrobiology</option>
+            <option>Operations</option>
+            <option>Security</option>
           </select>
         </div>
       </div>
 
-      <p class="section-label">Notification Preferences</p>
+      <p class="section-label">Preferences</p>
       <div class="row">
-        <div class="field">
-          <label>Mission Alerts</label>
-          <select id="alerts">
-            <option value="all">All alerts</option>
-            <option value="critical">Critical only</option>
-            <option value="none">None</option>
-          </select>
+        <div class="field"><label>Mission Alerts</label>
+          <select id="alerts"><option>All alerts</option><option>Critical only</option><option>None</option></select>
         </div>
-        <div class="field">
-          <label>Time Zone</label>
-          <select id="timezone">
-            <option value="UTC">UTC (Universal)</option>
-            <option value="EST">EST (Eastern)</option>
-            <option value="PST">PST (Pacific)</option>
-            <option value="GMT">GMT (Greenwich)</option>
-          </select>
+        <div class="field"><label>Time Zone</label>
+          <select id="timezone"><option>UTC (Universal)</option><option>EST (Eastern)</option><option>PST (Pacific)</option><option>GMT (Greenwich)</option></select>
         </div>
       </div>
 
@@ -257,23 +192,16 @@
   let selectedEmoji=saved.avatar||'👨‍🚀';
   document.getElementById('avatarDisplay').textContent=selectedEmoji;
 
-  // Build emoji grid
   const grid=document.getElementById('emojiGrid');
   EMOJIS.forEach(e=>{
     const d=document.createElement('div');
     d.className='emoji-opt'+(e===selectedEmoji?' selected':'');
     d.textContent=e;
-    d.onclick=()=>{
-      selectedEmoji=e;
-      document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('selected'));
-      d.classList.add('selected');
-      document.getElementById('avatarDisplay').textContent=e;
-    };
+    d.onclick=()=>{selectedEmoji=e;document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');document.getElementById('avatarDisplay').textContent=e;};
     grid.appendChild(d);
   });
 
   updateDisplay();
-
   function updateDisplay(){
     const fn=document.getElementById('firstName').value;
     const ln=document.getElementById('lastName').value;
@@ -281,7 +209,6 @@
     document.getElementById('displayName').textContent=(fn||ln)?(fn+' '+ln).trim():(commander.charAt(0).toUpperCase()+commander.slice(1));
     document.getElementById('displayCallsign').textContent='Callsign: '+(cs||'—');
   }
-
   document.querySelectorAll('input,select,textarea').forEach(i=>i.addEventListener('input',updateDisplay));
 
   function saveProfile(){
@@ -289,16 +216,9 @@
     fields.forEach(f=>{if(document.getElementById(f))data[f]=document.getElementById(f).value;});
     localStorage.setItem('profile_'+commander,JSON.stringify(data));
     updateDisplay();
-    const t=document.getElementById('toast');
-    t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),3000);
+    const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
   }
-
-  function resetForm(){
-    fields.forEach(f=>{if(document.getElementById(f))document.getElementById(f).value='';});
-    updateDisplay();
-  }
-
+  function resetForm(){fields.forEach(f=>{if(document.getElementById(f))document.getElementById(f).value='';});updateDisplay();}
   function logout(){localStorage.removeItem('commander');window.location.href='index.html';}
 </script>
 </body>
