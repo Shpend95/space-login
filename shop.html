@@ -3,260 +3,328 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ORBITAL COMMAND — Telescope Shop</title>
+  <title>Orbital Command — Telescope Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#020b18; font-family:'Courier New',monospace; color:#c0e8ff; min-height:100vh; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#060918;font-family:'Inter',sans-serif;color:#e2e8f0;min-height:100vh;}
+    .bg-orb{position:fixed;border-radius:50%;filter:blur(100px);z-index:0;pointer-events:none;}
+    .orb1{width:600px;height:600px;background:rgba(124,58,237,0.1);top:-200px;right:-150px;}
+    .orb2{width:400px;height:400px;background:rgba(14,165,233,0.08);bottom:-100px;left:-100px;}
 
-    nav {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:18px 40px;
-      background:rgba(0,20,45,0.9);
-      border-bottom:1px solid rgba(0,200,255,0.12);
-      position:sticky; top:0; z-index:50;
+    nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:rgba(6,9,24,0.8);border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:50;backdrop-filter:blur(20px);}
+    .nav-brand{display:flex;align-items:center;gap:10px;}
+    .nav-brand-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#2563eb);display:flex;align-items:center;justify-content:center;font-size:16px;}
+    .nav-brand span{font-size:15px;font-weight:700;color:#f1f5f9;}
+    .nav-links{display:flex;gap:4px;}
+    .nav-links a{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:rgba(148,163,184,0.7);text-decoration:none;transition:all 0.2s;}
+    .nav-links a:hover{color:#f1f5f9;background:rgba(255,255,255,0.06);}
+    .nav-links a.active{color:#a78bfa;background:rgba(124,58,237,0.12);}
+    .nav-right{display:flex;align-items:center;gap:12px;}
+    .nav-user{display:flex;align-items:center;gap:8px;}
+    .avatar-sm{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#2563eb);display:flex;align-items:center;justify-content:center;font-size:14px;}
+    .nav-name{font-size:13px;font-weight:500;color:#f1f5f9;}
+    .cart-btn{
+      display:flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;
+      font-size:13px;font-weight:500;color:#a78bfa;
+      background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);
+      cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;
     }
-    .nav-brand { font-size:16px; letter-spacing:4px; color:#00c8ff; }
-    .nav-links { display:flex; gap:8px; }
-    .nav-links a {
-      padding:8px 18px; border-radius:6px; font-size:11px; letter-spacing:3px;
-      color:rgba(0,200,255,0.6); text-decoration:none;
-      border:1px solid transparent; transition:all 0.2s;
+    .cart-btn:hover{background:rgba(124,58,237,0.18);}
+    .cart-count{
+      background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;
+      border-radius:99px;padding:1px 7px;font-size:11px;font-weight:700;
     }
-    .nav-links a:hover, .nav-links a.active { color:#00c8ff; border-color:rgba(0,200,255,0.3); background:rgba(0,200,255,0.07); }
-    .nav-right { display:flex; align-items:center; gap:16px; font-size:11px; letter-spacing:2px; color:rgba(0,200,255,0.4); }
-    .cart-btn {
-      padding:7px 16px; border-radius:6px; font-size:11px; letter-spacing:2px;
-      color:#00c8ff; border:1px solid rgba(0,200,255,0.3); background:none;
-      cursor:pointer; font-family:'Courier New',monospace; transition:all 0.2s;
-    }
-    .cart-btn:hover { background:rgba(0,200,255,0.08); }
-    .logout-btn {
-      padding:7px 16px; border-radius:6px; font-size:11px; letter-spacing:2px;
-      color:#ff4d6d; border:1px solid rgba(255,77,109,0.3); background:none;
-      cursor:pointer; font-family:'Courier New',monospace; transition:all 0.2s;
-    }
-    .logout-btn:hover { background:rgba(255,77,109,0.1); }
+    .logout-btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:#f87171;background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.15);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+    .logout-btn:hover{background:rgba(248,113,113,0.15);}
 
-    main { max-width:1100px; margin:0 auto; padding:50px 24px; }
+    main{max-width:1200px;margin:0 auto;padding:48px 40px;position:relative;z-index:1;}
 
-    .page-header { margin-bottom:40px; }
-    .page-header h2 { font-size:22px; letter-spacing:5px; color:#00c8ff; text-transform:uppercase; }
-    .page-header p  { margin-top:8px; font-size:11px; letter-spacing:2px; color:rgba(0,200,255,0.4); }
+    /* ── Header ── */
+    .shop-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;}
+    .shop-header h2{font-size:26px;font-weight:700;color:#f1f5f9;}
+    .shop-header p{font-size:14px;color:rgba(148,163,184,0.55);margin-top:6px;}
 
-    /* Grid */
-    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    /* ── Search & filter ── */
+    .controls{display:flex;gap:12px;align-items:center;}
+    .search-box{
+      display:flex;align-items:center;gap:8px;
+      background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+      border-radius:10px;padding:8px 14px;width:220px;
+    }
+    .search-box input{background:none;border:none;color:#f1f5f9;font-family:'Inter',sans-serif;font-size:13px;outline:none;width:100%;}
+    .search-box input::placeholder{color:rgba(100,116,139,0.5);}
+    .search-icon{color:rgba(100,116,139,0.5);font-size:14px;}
 
-    .product {
-      background:rgba(0,20,45,0.8);
-      border:1px solid rgba(0,200,255,0.12);
-      border-radius:14px; overflow:hidden;
-      transition:all 0.25s;
+    .filter-select{
+      background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+      border-radius:10px;padding:8px 14px;color:#e2e8f0;
+      font-family:'Inter',sans-serif;font-size:13px;outline:none;cursor:pointer;
     }
-    .product:hover {
-      border-color:rgba(0,200,255,0.35);
-      transform:translateY(-4px);
-      box-shadow:0 10px 30px rgba(0,150,255,0.1);
-    }
-    .product-img {
-      height:160px; background:linear-gradient(135deg,#021428,#042a50);
-      display:flex; align-items:center; justify-content:center; font-size:70px;
-      border-bottom:1px solid rgba(0,200,255,0.1);
-    }
-    .product-body { padding:22px; }
-    .product-name { font-size:13px; letter-spacing:3px; color:#00c8ff; margin-bottom:8px; }
-    .product-desc { font-size:11px; letter-spacing:1px; color:rgba(0,200,255,0.45); line-height:1.7; margin-bottom:16px; }
-    .product-footer { display:flex; align-items:center; justify-content:space-between; }
-    .product-price { font-size:18px; color:#00ff96; letter-spacing:2px; }
-    .product-badge {
-      font-size:9px; letter-spacing:2px; padding:3px 8px; border-radius:4px;
-      background:rgba(0,255,150,0.1); border:1px solid rgba(0,255,150,0.2); color:#00ff96;
-    }
-    .add-btn {
-      width:100%; margin-top:16px; padding:11px;
-      background:linear-gradient(135deg,#005a8e,#007abf);
-      border:1px solid rgba(0,200,255,0.3); border-radius:8px;
-      color:#e0f4ff; font-family:'Courier New',monospace;
-      font-size:11px; letter-spacing:3px; cursor:pointer; transition:all 0.3s;
-    }
-    .add-btn:hover { background:linear-gradient(135deg,#007abf,#00a0e0); box-shadow:0 0 16px rgba(0,160,220,0.3); }
-    .add-btn.added { background:linear-gradient(135deg,#006b40,#009c5e); border-color:rgba(0,255,150,0.3); }
+    .filter-select option{background:#0d1224;}
 
-    /* Cart panel */
-    .cart-overlay {
-      position:fixed; inset:0; background:rgba(0,5,15,0.7);
-      z-index:100; opacity:0; pointer-events:none; transition:opacity 0.3s;
+    /* ── Grid ── */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+
+    .product{
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+      border-radius:20px;overflow:hidden;transition:all 0.25s;position:relative;
     }
-    .cart-overlay.open { opacity:1; pointer-events:all; }
+    .product:hover{border-color:rgba(167,139,250,0.25);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.3);}
+    .product.wishlisted{border-color:rgba(244,63,94,0.25);}
 
-    .cart-panel {
-      position:fixed; top:0; right:0; bottom:0; width:380px;
-      background:#021428; border-left:1px solid rgba(0,200,255,0.15);
-      z-index:101; padding:32px 28px;
-      transform:translateX(100%); transition:transform 0.35s ease;
-      display:flex; flex-direction:column;
+    .product-img{
+      height:160px;display:flex;align-items:center;justify-content:center;font-size:72px;
+      background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(37,99,235,0.08));
+      border-bottom:1px solid rgba(255,255,255,0.05);position:relative;
     }
-    .cart-panel.open { transform:translateX(0); }
 
-    .cart-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; }
-    .cart-header h3 { font-size:14px; letter-spacing:4px; color:#00c8ff; }
-    .close-cart { background:none; border:none; color:rgba(0,200,255,0.5); font-size:20px; cursor:pointer; }
-    .close-cart:hover { color:#00c8ff; }
-
-    .cart-items { flex:1; overflow-y:auto; }
-    .cart-item {
-      display:flex; align-items:center; gap:14px;
-      padding:14px 0; border-bottom:1px solid rgba(0,200,255,0.08);
+    .badge-tag{
+      position:absolute;top:12px;left:12px;
+      font-size:10px;font-weight:700;letter-spacing:0.5px;padding:4px 10px;border-radius:99px;
     }
-    .cart-item-icon { font-size:28px; }
-    .cart-item-info { flex:1; }
-    .cart-item-name { font-size:11px; letter-spacing:2px; color:#c0e8ff; }
-    .cart-item-price { font-size:12px; color:#00ff96; margin-top:3px; }
-    .remove-btn { background:none; border:none; color:rgba(255,77,109,0.5); cursor:pointer; font-size:16px; }
-    .remove-btn:hover { color:#ff4d6d; }
+    .badge-tag.bestseller{background:rgba(251,191,36,0.15);border:1px solid rgba(251,191,36,0.3);color:#fbbf24;}
+    .badge-tag.premium{background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;}
+    .badge-tag.popular{background:rgba(14,165,233,0.15);border:1px solid rgba(14,165,233,0.3);color:#38bdf8;}
+    .badge-tag.pro{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#10b981;}
+    .badge-tag.starter{background:rgba(148,163,184,0.1);border:1px solid rgba(148,163,184,0.2);color:#94a3b8;}
+    .badge-tag.commander{background:rgba(244,63,94,0.12);border:1px solid rgba(244,63,94,0.25);color:#f43f5e;}
 
-    .cart-empty { text-align:center; padding:40px 0; font-size:11px; letter-spacing:2px; color:rgba(0,200,255,0.3); }
-
-    .cart-footer { border-top:1px solid rgba(0,200,255,0.1); padding-top:20px; margin-top:16px; }
-    .cart-total { display:flex; justify-content:space-between; font-size:14px; letter-spacing:2px; margin-bottom:20px; }
-    .cart-total span:last-child { color:#00ff96; }
-    .checkout-btn {
-      width:100%; padding:14px; border-radius:8px;
-      background:linear-gradient(135deg,#005a8e,#007abf);
-      border:1px solid rgba(0,200,255,0.3); color:#e0f4ff;
-      font-family:'Courier New',monospace; font-size:12px; letter-spacing:3px;
-      cursor:pointer; transition:all 0.3s;
+    .wishlist-btn{
+      position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:8px;
+      background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);
+      display:flex;align-items:center;justify-content:center;cursor:pointer;
+      font-size:14px;transition:all 0.2s;
     }
-    .checkout-btn:hover { background:linear-gradient(135deg,#007abf,#00a0e0); box-shadow:0 0 20px rgba(0,160,220,0.3); }
+    .wishlist-btn:hover,.wishlist-btn.active{background:rgba(244,63,94,0.15);border-color:rgba(244,63,94,0.3);}
 
-    .toast {
-      position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(80px);
-      background:rgba(0,200,255,0.1); border:1px solid rgba(0,200,255,0.3);
-      border-radius:10px; padding:12px 24px;
-      font-size:11px; letter-spacing:2px; color:#00c8ff;
-      opacity:0; transition:all 0.4s; z-index:200; white-space:nowrap;
-    }
-    .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    .product-body{padding:20px;}
+    .product-name{font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:6px;}
+    .product-desc{font-size:12px;color:rgba(148,163,184,0.55);line-height:1.6;margin-bottom:14px;}
 
-    /* Checkout success */
-    .success-msg {
-      display:none; text-align:center; padding:32px 0;
+    /* Rating */
+    .rating{display:flex;align-items:center;gap:6px;margin-bottom:14px;}
+    .stars{color:#fbbf24;font-size:12px;letter-spacing:1px;}
+    .rating-count{font-size:11px;color:rgba(148,163,184,0.45);}
+
+    .product-footer{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .price{font-size:20px;font-weight:700;color:#f1f5f9;}
+    .price-sub{font-size:11px;color:rgba(148,163,184,0.4);margin-top:2px;}
+
+    .add-btn{
+      width:100%;padding:11px;border-radius:10px;
+      background:linear-gradient(135deg,#7c3aed,#2563eb);border:none;
+      color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+      cursor:pointer;transition:all 0.3s;
     }
-    .success-msg .big { font-size:48px; margin-bottom:16px; }
-    .success-msg h3 { font-size:14px; letter-spacing:4px; color:#00ff96; margin-bottom:8px; }
-    .success-msg p  { font-size:11px; letter-spacing:2px; color:rgba(0,200,255,0.4); }
+    .add-btn:hover{opacity:0.9;box-shadow:0 6px 20px rgba(124,58,237,0.3);transform:translateY(-1px);}
+    .add-btn.added{background:linear-gradient(135deg,#059669,#10b981);}
+
+    /* ── Cart panel ── */
+    .cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px);}
+    .cart-overlay.open{opacity:1;pointer-events:all;}
+    .cart-panel{
+      position:fixed;top:0;right:0;bottom:0;width:400px;
+      background:#0d1224;border-left:1px solid rgba(255,255,255,0.07);
+      z-index:101;padding:32px 28px;
+      transform:translateX(100%);transition:transform 0.35s cubic-bezier(.4,0,.2,1);
+      display:flex;flex-direction:column;
+    }
+    .cart-panel.open{transform:translateX(0);}
+    .cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+    .cart-header h3{font-size:18px;font-weight:700;color:#f1f5f9;}
+    .close-cart{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;width:32px;height:32px;color:rgba(148,163,184,0.7);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .close-cart:hover{color:#f1f5f9;}
+
+    .cart-items{flex:1;overflow-y:auto;}
+    .cart-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+    .cart-item-icon{font-size:28px;width:48px;height:48px;border-radius:10px;background:rgba(124,58,237,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .cart-item-info{flex:1;}
+    .cart-item-name{font-size:13px;font-weight:600;color:#f1f5f9;}
+    .cart-item-price{font-size:13px;color:#a78bfa;margin-top:3px;font-weight:500;}
+    .remove-btn{background:none;border:none;color:rgba(148,163,184,0.4);cursor:pointer;font-size:16px;transition:color 0.2s;padding:4px;}
+    .remove-btn:hover{color:#f43f5e;}
+
+    .cart-empty{text-align:center;padding:48px 0;color:rgba(100,116,139,0.5);}
+    .cart-empty div{font-size:40px;margin-bottom:12px;}
+    .cart-empty p{font-size:13px;}
+
+    .cart-footer{border-top:1px solid rgba(255,255,255,0.06);padding-top:20px;margin-top:16px;}
+    .cart-total{display:flex;justify-content:space-between;font-size:15px;font-weight:600;margin-bottom:8px;}
+    .cart-total span:last-child{color:#a78bfa;}
+    .cart-tax{display:flex;justify-content:space-between;font-size:12px;color:rgba(148,163,184,0.45);margin-bottom:20px;}
+    .checkout-btn{
+      width:100%;padding:13px;border-radius:10px;
+      background:linear-gradient(135deg,#7c3aed,#2563eb);border:none;
+      color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;
+      cursor:pointer;transition:all 0.3s;
+    }
+    .checkout-btn:hover{opacity:0.9;box-shadow:0 6px 20px rgba(124,58,237,0.35);}
+
+    /* ── Toast ── */
+    .toast{
+      position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);
+      background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);
+      border-radius:12px;padding:12px 20px;font-size:13px;font-weight:500;color:#a78bfa;
+      opacity:0;transition:all 0.4s;z-index:200;white-space:nowrap;
+    }
+    .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+    .success-state{text-align:center;padding:32px 0;}
+    .success-state .big{font-size:48px;margin-bottom:14px;}
+    .success-state h3{font-size:16px;font-weight:700;color:#10b981;margin-bottom:6px;}
+    .success-state p{font-size:13px;color:rgba(148,163,184,0.5);}
   </style>
 </head>
 <body>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
 
 <nav>
-  <div class="nav-brand">🛸 ORBITAL COMMAND</div>
+  <div class="nav-brand">
+    <div class="nav-brand-icon">🛸</div>
+    <span>Orbital Command</span>
+  </div>
   <div class="nav-links">
-    <a href="dashboard.html">DASHBOARD</a>
-    <a href="profile.html">PROFILE</a>
-    <a href="shop.html" class="active">TELESCOPE SHOP</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="profile.html">Profile</a>
+    <a href="shop.html" class="active">Telescope Shop</a>
   </div>
   <div class="nav-right">
-    <span id="navUser"></span>
-    <button class="cart-btn" onclick="openCart()">🛒 CART (<span id="cartCount">0</span>)</button>
-    <button class="logout-btn" onclick="logout()">LOGOUT</button>
+    <div class="nav-user">
+      <div class="avatar-sm">👨‍🚀</div>
+      <span class="nav-name" id="navUser"></span>
+    </div>
+    <button class="cart-btn" onclick="openCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+    <button class="logout-btn" onclick="logout()">Sign Out</button>
   </div>
 </nav>
 
 <main>
-  <div class="page-header">
-    <h2>🔭 Telescope Shop</h2>
-    <p>PREMIUM DEEP SPACE OBSERVATION EQUIPMENT — COMMANDER EXCLUSIVE PRICING</p>
+  <div class="shop-header">
+    <div>
+      <h2>Telescope Shop</h2>
+      <p>Commander-exclusive pricing on premium deep space observation equipment</p>
+    </div>
+    <div class="controls">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search telescopes..." oninput="renderProducts()"/>
+      </div>
+      <select class="filter-select" id="sortSelect" onchange="renderProducts()">
+        <option value="default">Sort: Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name">Name: A–Z</option>
+      </select>
+    </div>
   </div>
 
   <div class="grid" id="productGrid"></div>
 </main>
 
-<!-- Cart panel -->
+<!-- Cart -->
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 <div class="cart-panel" id="cartPanel">
   <div class="cart-header">
-    <h3>🛒 YOUR CART</h3>
+    <h3>Your Cart</h3>
     <button class="close-cart" onclick="closeCart()">✕</button>
   </div>
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-footer" id="cartFooter" style="display:none">
-    <div class="cart-total"><span>TOTAL</span><span id="cartTotal">$0</span></div>
-    <button class="checkout-btn" onclick="checkout()">CONFIRM PURCHASE</button>
+    <div class="cart-total"><span>Subtotal</span><span id="cartTotal">$0</span></div>
+    <div class="cart-tax"><span>Tax (8.5%)</span><span id="cartTax">$0</span></div>
+    <button class="checkout-btn" onclick="checkout()">Confirm Purchase</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  const commander = localStorage.getItem('commander');
-  if (!commander) window.location.href = 'index.html';
-  document.getElementById('navUser').textContent = commander.toUpperCase();
+  const commander=localStorage.getItem('commander');
+  if(!commander)window.location.href='index.html';
+  document.getElementById('navUser').textContent=commander.charAt(0).toUpperCase()+commander.slice(1);
 
-  const PRODUCTS = [
-    { id:1, icon:'🔭', name:'NEBULA PRO X1',      price:1299, badge:'BESTSELLER', desc:'Refractor telescope with 120mm aperture. Perfect for nebula and galaxy observation.' },
-    { id:2, icon:'🌌', name:'DEEP SKY HUNTER',    price:2499, badge:'PREMIUM',    desc:'12" Dobsonian reflector. Captures light from 10 billion light-years away.' },
-    { id:3, icon:'🪐', name:'SATURN SPOTTER',      price:699,  badge:'POPULAR',   desc:'70mm refractor optimized for planetary detail. See Saturn\'s rings in stunning clarity.' },
-    { id:4, icon:'⭐', name:'STELLAR MAX 8000',    price:3799, badge:'PRO GRADE',  desc:'8" Schmidt-Cassegrain with GoTo mount. Automatically finds and tracks 42,000+ objects.' },
-    { id:5, icon:'🌙', name:'LUNAR OBSERVER',      price:449,  badge:'STARTER',   desc:'Compact 60mm refractor perfect for moon craters and bright planets.' },
-    { id:6, icon:'🚀', name:'ORBITAL ELITE 200',   price:5999, badge:'COMMANDER', desc:'200mm apochromatic refractor with carbon fiber tube. The ultimate deep space instrument.' },
+  const PRODUCTS=[
+    {id:1,icon:'🔭',name:'Nebula Pro X1',price:1299,badge:'bestseller',badgeLabel:'Bestseller',desc:'Refractor telescope with 120mm aperture. Perfect for nebula and galaxy observation.',rating:4.8,reviews:124},
+    {id:2,icon:'🌌',name:'Deep Sky Hunter',price:2499,badge:'premium',badgeLabel:'Premium',desc:'12" Dobsonian reflector. Captures light from 10 billion light-years away.',rating:4.9,reviews:86},
+    {id:3,icon:'🪐',name:'Saturn Spotter',price:699,badge:'popular',badgeLabel:'Popular',desc:'70mm refractor optimized for planetary detail. See Saturn\'s rings in stunning clarity.',rating:4.6,reviews:213},
+    {id:4,icon:'⭐',name:'Stellar Max 8000',price:3799,badge:'pro',badgeLabel:'Pro Grade',desc:'8" Schmidt-Cassegrain with GoTo mount. Automatically finds and tracks 42,000+ objects.',rating:4.9,reviews:57},
+    {id:5,icon:'🌙',name:'Lunar Observer',price:449,badge:'starter',badgeLabel:'Starter',desc:'Compact 60mm refractor perfect for moon craters and bright planets.',rating:4.4,reviews:341},
+    {id:6,icon:'🚀',name:'Orbital Elite 200',price:5999,badge:'commander',badgeLabel:'Commander',desc:'200mm apochromatic refractor with carbon fiber tube. The ultimate deep space instrument.',rating:5.0,reviews:28},
   ];
 
-  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+  let wishlist=JSON.parse(localStorage.getItem('wishlist')||'[]');
 
-  function renderProducts() {
-    const grid = document.getElementById('productGrid');
-    grid.innerHTML = PRODUCTS.map(p => {
-      const inCart = cart.find(c => c.id === p.id);
+  function stars(r){return '★'.repeat(Math.floor(r))+'☆'.repeat(5-Math.floor(r));}
+
+  function renderProducts(){
+    const q=document.getElementById('searchInput').value.toLowerCase();
+    const sort=document.getElementById('sortSelect').value;
+    let list=[...PRODUCTS].filter(p=>p.name.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q));
+    if(sort==='price-asc')list.sort((a,b)=>a.price-b.price);
+    else if(sort==='price-desc')list.sort((a,b)=>b.price-a.price);
+    else if(sort==='name')list.sort((a,b)=>a.name.localeCompare(b.name));
+
+    const grid=document.getElementById('productGrid');
+    if(list.length===0){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:60px;color:rgba(148,163,184,0.4);font-size:14px;">No telescopes found</div>';return;}
+    grid.innerHTML=list.map(p=>{
+      const inCart=cart.find(c=>c.id===p.id);
+      const inWish=wishlist.includes(p.id);
       return `
-        <div class="product">
-          <div class="product-img">${p.icon}</div>
-          <div class="product-body">
-            <div class="product-name">${p.name}</div>
-            <div class="product-desc">${p.desc}</div>
-            <div class="product-footer">
-              <div class="product-price">$${p.price.toLocaleString()}</div>
-              <div class="product-badge">${p.badge}</div>
-            </div>
-            <button class="add-btn ${inCart ? 'added' : ''}" id="btn-${p.id}" onclick="addToCart(${p.id})">
-              ${inCart ? '✓ ADDED TO CART' : '+ ADD TO CART'}
-            </button>
+      <div class="product${inWish?' wishlisted':''}">
+        <div class="product-img">
+          ${p.icon}
+          <div class="badge-tag ${p.badge}">${p.badgeLabel}</div>
+          <div class="wishlist-btn${inWish?' active':''}" onclick="toggleWishlist(${p.id})" title="Wishlist">${inWish?'❤️':'🤍'}</div>
+        </div>
+        <div class="product-body">
+          <div class="product-name">${p.name}</div>
+          <div class="rating"><span class="stars">${stars(p.rating)}</span><span class="rating-count">${p.rating} (${p.reviews})</span></div>
+          <div class="product-desc">${p.desc}</div>
+          <div class="product-footer">
+            <div><div class="price">$${p.price.toLocaleString()}</div><div class="price-sub">Commander pricing</div></div>
           </div>
-        </div>`;
-    }).join('');
+          <button class="add-btn${inCart?' added':''}" id="btn-${p.id}" onclick="addToCart(${p.id})">
+            ${inCart?'✓ Added to Cart':'Add to Cart'}
+          </button>
+        </div>
+      </div>`}).join('');
   }
 
-  function addToCart(id) {
-    const product = PRODUCTS.find(p => p.id === id);
-    if (cart.find(c => c.id === id)) return;
-    cart.push(product);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
+  function addToCart(id){
+    if(cart.find(c=>c.id===id))return;
+    const p=PRODUCTS.find(x=>x.id===id);
+    cart.push(p);
+    localStorage.setItem('cart',JSON.stringify(cart));
+    updateCartCount();renderProducts();renderCartItems();
+    showToast(`✓ ${p.name} added to cart`);
+  }
+
+  function removeFromCart(id){
+    cart=cart.filter(c=>c.id!==id);
+    localStorage.setItem('cart',JSON.stringify(cart));
+    updateCartCount();renderProducts();renderCartItems();
+  }
+
+  function toggleWishlist(id){
+    if(wishlist.includes(id))wishlist=wishlist.filter(x=>x!==id);
+    else wishlist.push(id);
+    localStorage.setItem('wishlist',JSON.stringify(wishlist));
     renderProducts();
-    renderCartItems();
-    showToast(`✓ ${product.name} ADDED TO CART`);
   }
 
-  function removeFromCart(id) {
-    cart = cart.filter(c => c.id !== id);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-    renderProducts();
-    renderCartItems();
-  }
+  function updateCartCount(){document.getElementById('cartCount').textContent=cart.length;}
 
-  function updateCartCount() {
-    document.getElementById('cartCount').textContent = cart.length;
-  }
-
-  function renderCartItems() {
-    const el = document.getElementById('cartItems');
-    const footer = document.getElementById('cartFooter');
-    if (cart.length === 0) {
-      el.innerHTML = '<div class="cart-empty">YOUR CART IS EMPTY</div>';
-      footer.style.display = 'none';
-      return;
+  function renderCartItems(){
+    const el=document.getElementById('cartItems');
+    const footer=document.getElementById('cartFooter');
+    if(cart.length===0){
+      el.innerHTML='<div class="cart-empty"><div>🛒</div><p>Your cart is empty</p></div>';
+      footer.style.display='none';return;
     }
-    el.innerHTML = cart.map(p => `
+    el.innerHTML=cart.map(p=>`
       <div class="cart-item">
         <div class="cart-item-icon">${p.icon}</div>
         <div class="cart-item-info">
@@ -265,52 +333,38 @@
         </div>
         <button class="remove-btn" onclick="removeFromCart(${p.id})">✕</button>
       </div>`).join('');
-    const total = cart.reduce((s, p) => s + p.price, 0);
-    document.getElementById('cartTotal').textContent = '$' + total.toLocaleString();
-    footer.style.display = 'block';
+    const sub=cart.reduce((s,p)=>s+p.price,0);
+    const tax=Math.round(sub*0.085);
+    document.getElementById('cartTotal').textContent='$'+sub.toLocaleString();
+    document.getElementById('cartTax').textContent='$'+tax.toLocaleString();
+    footer.style.display='block';
   }
 
-  function openCart() {
-    renderCartItems();
-    document.getElementById('cartOverlay').classList.add('open');
-    document.getElementById('cartPanel').classList.add('open');
-  }
+  function openCart(){renderCartItems();document.getElementById('cartOverlay').classList.add('open');document.getElementById('cartPanel').classList.add('open');}
+  function closeCart(){document.getElementById('cartOverlay').classList.remove('open');document.getElementById('cartPanel').classList.remove('open');}
 
-  function closeCart() {
-    document.getElementById('cartOverlay').classList.remove('open');
-    document.getElementById('cartPanel').classList.remove('open');
-  }
-
-  function checkout() {
-    const total = cart.reduce((s, p) => s + p.price, 0);
-    cart = [];
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-    renderProducts();
-    document.getElementById('cartItems').innerHTML = `
-      <div class="success-msg" style="display:block">
+  function checkout(){
+    const sub=cart.reduce((s,p)=>s+p.price,0);
+    cart=[];localStorage.setItem('cart',JSON.stringify(cart));
+    updateCartCount();renderProducts();
+    document.getElementById('cartItems').innerHTML=`
+      <div class="success-state">
         <div class="big">🚀</div>
-        <h3>ORDER CONFIRMED!</h3>
-        <p>YOUR TELESCOPES ARE ON THEIR WAY<br/>TO ORBITAL STATION.</p>
+        <h3>Order Confirmed!</h3>
+        <p>Your telescopes are on their way<br/>to your orbital station.</p>
       </div>`;
-    document.getElementById('cartFooter').style.display = 'none';
-    showToast('✓ ORDER PLACED — TOTAL $' + total.toLocaleString());
+    document.getElementById('cartFooter').style.display='none';
+    showToast('✓ Order placed — preparing for launch!');
   }
 
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+  function showToast(msg){
+    const t=document.getElementById('toast');t.textContent=msg;
+    t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
   }
 
-  function logout() {
-    localStorage.removeItem('commander');
-    window.location.href = 'index.html';
-  }
+  function logout(){localStorage.removeItem('commander');window.location.href='index.html';}
 
-  renderProducts();
-  updateCartCount();
+  renderProducts();updateCartCount();
 </script>
 </body>
 </html>

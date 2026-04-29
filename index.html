@@ -1,408 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ORBITAL COMMAND — Secure Access</title>
+  <title>Orbital Command — Secure Access</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background: #020b18;
-      font-family: 'Courier New', monospace;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      background:#060918;
+      font-family:'Inter',sans-serif;
+      height:100vh;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
     }
 
-    /* ── Starfield ── */
-    canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-    }
+    /* ── Background ── */
+    canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;}
 
-    /* ── Earth glow in background ── */
-    .earth {
-      position: fixed;
-      bottom: -320px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 700px;
-      height: 700px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%,
-        #1a6b9a 0%, #0d3d6b 40%, #061e3a 70%, #020b18 100%);
-      box-shadow: 0 0 80px 20px rgba(30, 100, 180, 0.25);
-      z-index: 0;
+    .bg-orb{
+      position:fixed;border-radius:50%;filter:blur(80px);z-index:0;pointer-events:none;
     }
+    .orb1{width:600px;height:600px;background:rgba(124,58,237,0.15);top:-200px;right:-100px;}
+    .orb2{width:500px;height:500px;background:rgba(14,165,233,0.12);bottom:-150px;left:-100px;}
+    .orb3{width:300px;height:300px;background:rgba(236,72,153,0.08);top:50%;left:50%;transform:translate(-50%,-50%);}
 
-    /* ── Login card ── */
-    .card {
-      position: relative;
-      z-index: 10;
-      width: 420px;
-      background: rgba(5, 20, 40, 0.85);
-      border: 1px solid rgba(0, 200, 255, 0.2);
-      border-radius: 16px;
-      padding: 48px 40px 40px;
-      backdrop-filter: blur(12px);
-      box-shadow:
-        0 0 40px rgba(0, 180, 255, 0.08),
-        inset 0 0 30px rgba(0, 100, 200, 0.05);
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: -1px; left: 20%; right: 20%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #00c8ff, transparent);
-      border-radius: 2px;
+    /* ── Card ── */
+    .card{
+      position:relative;z-index:10;width:440px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:24px;padding:48px 44px 44px;
+      backdrop-filter:blur(24px);
+      box-shadow:0 32px 80px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.06);
     }
 
     /* ── Header ── */
-    .badge {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 32px;
+    .logo{display:flex;align-items:center;gap:12px;margin-bottom:36px;}
+    .logo-icon{
+      width:44px;height:44px;border-radius:12px;
+      background:linear-gradient(135deg,#7c3aed,#2563eb);
+      display:flex;align-items:center;justify-content:center;font-size:22px;
+      box-shadow:0 8px 24px rgba(124,58,237,0.4);
     }
+    .logo-text h1{font-size:17px;font-weight:700;color:#f1f5f9;letter-spacing:0.5px;}
+    .logo-text p{font-size:12px;color:rgba(148,163,184,0.7);margin-top:2px;}
 
-    .badge-icon {
-      font-size: 36px;
-      filter: drop-shadow(0 0 8px rgba(0, 200, 255, 0.6));
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);
+      border-radius:20px;padding:5px 12px;margin-bottom:28px;
     }
+    .badge-dot{width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 6px #10b981;animation:pulse 2s infinite;}
+    .badge span{font-size:11px;font-weight:500;color:#10b981;letter-spacing:0.5px;}
 
-    .badge-text h1 {
-      font-size: 18px;
-      letter-spacing: 4px;
-      color: #00c8ff;
-      text-transform: uppercase;
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+    h2{font-size:24px;font-weight:700;color:#f1f5f9;margin-bottom:6px;}
+    .subtitle{font-size:14px;color:rgba(148,163,184,0.6);margin-bottom:32px;}
+
+    /* ── Fields ── */
+    .field{margin-bottom:18px;position:relative;}
+    label{display:block;font-size:12px;font-weight:500;color:rgba(148,163,184,0.8);margin-bottom:7px;}
+
+    .input-wrap{position:relative;}
+    input{
+      width:100%;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:12px;padding:13px 44px 13px 16px;
+      color:#f1f5f9;font-family:'Inter',sans-serif;font-size:14px;
+      outline:none;transition:all 0.2s;
     }
+    input:focus{border-color:rgba(124,58,237,0.6);background:rgba(124,58,237,0.06);box-shadow:0 0 0 3px rgba(124,58,237,0.12);}
+    input::placeholder{color:rgba(100,116,139,0.5);}
 
-    .badge-text p {
-      font-size: 11px;
-      color: rgba(0, 200, 255, 0.45);
-      letter-spacing: 2px;
-      margin-top: 2px;
+    .input-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:rgba(100,116,139,0.5);font-size:16px;cursor:pointer;user-select:none;}
+    .input-icon:hover{color:rgba(148,163,184,0.8);}
+
+    /* ── Options row ── */
+    .options{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    .remember{display:flex;align-items:center;gap:8px;cursor:pointer;}
+    .remember input[type=checkbox]{
+      width:16px;height:16px;border-radius:4px;accent-color:#7c3aed;cursor:pointer;padding:0;
     }
-
-    .divider {
-      border: none;
-      border-top: 1px solid rgba(0, 200, 255, 0.1);
-      margin-bottom: 28px;
-    }
-
-    /* ── Status indicator ── */
-    .status-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      color: rgba(0, 255, 150, 0.7);
-      letter-spacing: 2px;
-      margin-bottom: 28px;
-    }
-
-    .dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: #00ff96;
-      box-shadow: 0 0 6px #00ff96;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.3; }
-    }
-
-    /* ── Form fields ── */
-    .field {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      font-size: 10px;
-      letter-spacing: 3px;
-      color: rgba(0, 200, 255, 0.5);
-      margin-bottom: 8px;
-      text-transform: uppercase;
-    }
-
-    input {
-      width: 100%;
-      background: rgba(0, 30, 60, 0.6);
-      border: 1px solid rgba(0, 200, 255, 0.15);
-      border-radius: 8px;
-      padding: 12px 16px;
-      color: #e0f4ff;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      letter-spacing: 1px;
-      outline: none;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    input:focus {
-      border-color: rgba(0, 200, 255, 0.5);
-      box-shadow: 0 0 12px rgba(0, 200, 255, 0.1);
-    }
-
-    input::placeholder { color: rgba(100, 170, 200, 0.3); }
+    .remember span{font-size:13px;color:rgba(148,163,184,0.7);}
+    .forgot{font-size:13px;color:#a78bfa;text-decoration:none;transition:color 0.2s;}
+    .forgot:hover{color:#c4b5fd;}
 
     /* ── Button ── */
-    .btn {
-      width: 100%;
-      margin-top: 8px;
-      padding: 14px;
-      background: linear-gradient(135deg, #005a8e, #007abf);
-      border: 1px solid rgba(0, 200, 255, 0.3);
-      border-radius: 8px;
-      color: #e0f4ff;
-      font-family: 'Courier New', monospace;
-      font-size: 13px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
+    .btn{
+      width:100%;padding:14px;border-radius:12px;
+      background:linear-gradient(135deg,#7c3aed,#2563eb);
+      border:none;color:#fff;font-family:'Inter',sans-serif;
+      font-size:14px;font-weight:600;letter-spacing:0.3px;
+      cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;
     }
-
-    .btn:hover {
-      background: linear-gradient(135deg, #007abf, #00a0e0);
-      box-shadow: 0 0 20px rgba(0, 160, 220, 0.35);
-      transform: translateY(-1px);
+    .btn::before{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,#6d28d9,#1d4ed8);
+      opacity:0;transition:opacity 0.3s;
     }
-
-    .btn:active { transform: translateY(0); }
-
-    .btn.loading {
-      pointer-events: none;
-      letter-spacing: 2px;
-    }
+    .btn:hover::before{opacity:1;}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,58,237,0.4);}
+    .btn:active{transform:translateY(0);}
+    .btn span{position:relative;z-index:1;}
+    .btn.loading{pointer-events:none;opacity:0.8;}
 
     /* ── Message ── */
-    .message {
-      margin-top: 18px;
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-align: center;
-      min-height: 18px;
-      transition: all 0.3s;
-    }
+    .message{margin-top:16px;font-size:13px;text-align:center;min-height:16px;}
+    .message.error{color:#f87171;}
+    .message.success{color:#34d399;}
 
-    .message.error  { color: #ff4d6d; }
-    .message.success { color: #00ff96; }
+    /* ── Divider ── */
+    .divider{display:flex;align-items:center;gap:12px;margin:24px 0;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06);}
+    .divider span{font-size:12px;color:rgba(100,116,139,0.5);}
+
+    /* ── Demo credentials ── */
+    .demo{
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+      border-radius:12px;padding:14px 16px;
+    }
+    .demo p{font-size:11px;color:rgba(100,116,139,0.6);margin-bottom:8px;font-weight:500;letter-spacing:0.3px;}
+    .demo-creds{display:flex;gap:8px;flex-wrap:wrap;}
+    .cred-chip{
+      font-size:11px;color:rgba(167,139,250,0.8);
+      background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);
+      border-radius:6px;padding:3px 9px;cursor:pointer;transition:all 0.2s;
+    }
+    .cred-chip:hover{background:rgba(124,58,237,0.2);color:#c4b5fd;}
 
     /* ── Success overlay ── */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      background: rgba(0, 10, 25, 0.97);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.6s;
+    .overlay{
+      position:fixed;inset:0;z-index:100;
+      background:rgba(6,9,24,0.96);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:opacity 0.5s;
     }
+    .overlay.show{opacity:1;pointer-events:all;}
+    .overlay-icon{font-size:64px;animation:launch 1.5s ease-in forwards;}
+    .overlay h2{font-size:26px;font-weight:700;color:#a78bfa;margin-top:20px;}
+    .overlay p{font-size:14px;color:rgba(148,163,184,0.5);margin-top:8px;}
 
-    .overlay.show {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .overlay h2 {
-      font-size: 28px;
-      letter-spacing: 8px;
-      color: #00ff96;
-      text-shadow: 0 0 20px rgba(0, 255, 150, 0.6);
-      margin-top: 24px;
-      animation: flicker 0.1s 3;
-    }
-
-    .overlay p {
-      margin-top: 12px;
-      font-size: 13px;
-      letter-spacing: 3px;
-      color: rgba(0, 200, 255, 0.6);
-    }
-
-    .rocket {
-      font-size: 64px;
-      animation: launch 1.5s ease-in forwards;
-    }
-
-    @keyframes launch {
-      0%   { transform: translateY(0) rotate(-45deg); opacity: 1; }
-      100% { transform: translateY(-200px) rotate(-45deg); opacity: 0; }
-    }
-
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0; }
-    }
-
-    /* ── Footer ── */
-    .footer {
-      margin-top: 28px;
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: rgba(0, 200, 255, 0.2);
-      text-align: center;
+    @keyframes launch{
+      0%{transform:translateY(0) rotate(-45deg);opacity:1;}
+      100%{transform:translateY(-220px) rotate(-45deg);opacity:0;}
     }
   </style>
 </head>
 <body>
-
 <canvas id="stars"></canvas>
-<div class="earth"></div>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
 
 <div class="card">
-  <div class="badge">
-    <span class="badge-icon">🛸</span>
-    <div class="badge-text">
+  <div class="logo">
+    <div class="logo-icon">🛸</div>
+    <div class="logo-text">
       <h1>Orbital Command</h1>
-      <p>Secure Mission Access Portal</p>
+      <p>Mission Control Portal</p>
     </div>
   </div>
-  <hr class="divider"/>
 
-  <div class="status-bar">
-    <div class="dot"></div>
-    SYSTEMS ONLINE — AWAITING AUTHENTICATION
-  </div>
+  <div class="badge"><div class="badge-dot"></div><span>All systems operational</span></div>
 
-  <form id="loginForm" onsubmit="handleLogin(event)">
+  <h2>Welcome back</h2>
+  <p class="subtitle">Sign in to access your command station</p>
+
+  <form onsubmit="handleLogin(event)">
     <div class="field">
       <label>Commander ID</label>
-      <input type="text" id="username" placeholder="Enter your callsign" autocomplete="off"/>
+      <div class="input-wrap">
+        <input type="text" id="username" placeholder="Enter your callsign" autocomplete="off"/>
+        <span class="input-icon">👤</span>
+      </div>
     </div>
     <div class="field">
       <label>Access Code</label>
-      <input type="password" id="password" placeholder="••••••••"/>
+      <div class="input-wrap">
+        <input type="password" id="password" placeholder="••••••••" id="password"/>
+        <span class="input-icon" onclick="togglePassword(this)">👁</span>
+      </div>
     </div>
-    <button class="btn" type="submit" id="loginBtn">INITIATE ACCESS</button>
+
+    <div class="options">
+      <label class="remember">
+        <input type="checkbox" id="rememberMe"/>
+        <span>Remember me</span>
+      </label>
+      <a href="#" class="forgot">Forgot code?</a>
+    </div>
+
+    <button class="btn" type="submit" id="loginBtn"><span id="btnText">Sign In</span></button>
     <div class="message" id="message"></div>
   </form>
 
-  <div class="footer">ORBITAL COMMAND STATION — CLEARANCE LEVEL ALPHA</div>
+  <div class="divider"><span>Quick access</span></div>
+
+  <div class="demo">
+    <p>DEMO CREDENTIALS — CLICK TO FILL</p>
+    <div class="demo-creds">
+      <div class="cred-chip" onclick="fillCreds('commander','orbit2026')">commander</div>
+      <div class="cred-chip" onclick="fillCreds('admin','launch123')">admin</div>
+      <div class="cred-chip" onclick="fillCreds('shpend','aetrex2026')">shpend</div>
+    </div>
+  </div>
 </div>
 
-<!-- Success overlay -->
 <div class="overlay" id="overlay">
-  <div class="rocket">🚀</div>
-  <h2>ACCESS GRANTED</h2>
-  <p>WELCOME ABOARD, COMMANDER</p>
+  <div class="overlay-icon">🚀</div>
+  <h2>Access Granted</h2>
+  <p>Launching mission control...</p>
 </div>
 
 <script>
-  /* ── Starfield ── */
-  const canvas = document.getElementById('stars');
-  const ctx = canvas.getContext('2d');
-  let stars = [];
+  /* Starfield */
+  const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');
+  let stars=[];
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  function initStars(){stars=[];for(let i=0;i<180;i++)stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.4+0.2,alpha:Math.random(),d:Math.random()*0.015+0.003});}
+  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);stars.forEach(s=>{s.alpha+=s.d*(Math.random()>.5?1:-1);s.alpha=Math.max(0.05,Math.min(1,s.alpha));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(200,210,255,${s.alpha})`;ctx.fill();});requestAnimationFrame(draw);}
+  window.addEventListener('resize',()=>{resize();initStars();});
+  resize();initStars();draw();
 
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+  /* Check remember me */
+  const saved=localStorage.getItem('rememberedUser');
+  if(saved){document.getElementById('username').value=saved;document.getElementById('rememberMe').checked=true;}
+
+  const USERS={'commander':'orbit2026','admin':'launch123','shpend':'aetrex2026'};
+
+  function fillCreds(u,p){
+    document.getElementById('username').value=u;
+    document.getElementById('password').value=p;
   }
 
-  function initStars(count = 200) {
-    stars = [];
-    for (let i = 0; i < count; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 1.5 + 0.2,
-        alpha: Math.random(),
-        speed: Math.random() * 0.4 + 0.1,
-        twinkle: Math.random() * 0.02 + 0.005
-      });
-    }
+  function togglePassword(el){
+    const inp=el.previousElementSibling;
+    inp.type=inp.type==='password'?'text':'password';
+    el.textContent=inp.type==='password'?'👁':'🙈';
   }
 
-  function drawStars() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    stars.forEach(s => {
-      s.alpha += s.twinkle * (Math.random() > 0.5 ? 1 : -1);
-      s.alpha = Math.max(0.1, Math.min(1, s.alpha));
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(200, 230, 255, ${s.alpha})`;
-      ctx.fill();
-    });
-    requestAnimationFrame(drawStars);
-  }
-
-  window.addEventListener('resize', () => { resize(); initStars(); });
-  resize(); initStars(); drawStars();
-
-  /* ── Login logic ── */
-  // Demo credentials
-  const USERS = {
-    'commander': 'orbit2026',
-    'admin':     'launch123',
-    'shpend':    'aetrex2026'
-  };
-
-  function handleLogin(e) {
+  function handleLogin(e){
     e.preventDefault();
-    const username = document.getElementById('username').value.trim().toLowerCase();
-    const password = document.getElementById('password').value;
-    const btn      = document.getElementById('loginBtn');
-    const msg      = document.getElementById('message');
+    const u=document.getElementById('username').value.trim().toLowerCase();
+    const p=document.getElementById('password').value;
+    const btn=document.getElementById('loginBtn');
+    const msg=document.getElementById('message');
 
-    if (!username || !password) {
-      showMessage('COMMANDER ID AND ACCESS CODE REQUIRED', 'error');
-      return;
-    }
+    if(!u||!p){showMsg('Commander ID and access code are required','error');return;}
 
-    // Loading state
-    btn.textContent = 'AUTHENTICATING...';
     btn.classList.add('loading');
-    msg.className = 'message';
-    msg.textContent = '';
+    document.getElementById('btnText').textContent='Authenticating...';
+    msg.className='message';msg.textContent='';
 
-    setTimeout(() => {
-      if (USERS[username] && USERS[username] === password) {
-        showMessage('IDENTITY VERIFIED — LAUNCHING...', 'success');
-        localStorage.setItem('commander', username);
-        setTimeout(() => {
+    setTimeout(()=>{
+      if(USERS[u]&&USERS[u]===p){
+        if(document.getElementById('rememberMe').checked)localStorage.setItem('rememberedUser',u);
+        else localStorage.removeItem('rememberedUser');
+        localStorage.setItem('commander',u);
+        showMsg('Identity verified — launching...','success');
+        setTimeout(()=>{
           document.getElementById('overlay').classList.add('show');
-          setTimeout(() => { window.location.href = 'dashboard.html'; }, 1800);
-        }, 800);
+          setTimeout(()=>window.location.href='dashboard.html',1800);
+        },600);
       } else {
-        btn.textContent = 'INITIATE ACCESS';
         btn.classList.remove('loading');
-        showMessage('ACCESS DENIED — INVALID CREDENTIALS', 'error');
+        document.getElementById('btnText').textContent='Sign In';
+        showMsg('Invalid credentials — access denied','error');
         shake(document.querySelector('.card'));
       }
-    }, 1200);
+    },1100);
   }
 
-  function showMessage(text, type) {
-    const msg = document.getElementById('message');
-    msg.textContent = text;
-    msg.className = `message ${type}`;
-  }
+  function showMsg(t,type){const m=document.getElementById('message');m.textContent=t;m.className='message '+type;}
 
-  function shake(el) {
-    el.style.animation = 'none';
-    el.style.transition = 'transform 0.05s';
-    let i = 0;
-    const interval = setInterval(() => {
-      el.style.transform = `translateX(${i % 2 === 0 ? -6 : 6}px)`;
-      if (++i > 8) { clearInterval(interval); el.style.transform = ''; }
-    }, 50);
+  function shake(el){
+    let i=0;
+    const iv=setInterval(()=>{el.style.transform=`translateX(${i%2===0?-6:6}px)`;if(++i>8){clearInterval(iv);el.style.transform='';}},50);
   }
 </script>
 </body>

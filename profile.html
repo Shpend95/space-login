@@ -3,245 +3,303 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ORBITAL COMMAND — Profile</title>
+  <title>Orbital Command — Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#020b18; font-family:'Courier New',monospace; color:#c0e8ff; min-height:100vh; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#060918;font-family:'Inter',sans-serif;color:#e2e8f0;min-height:100vh;}
+    .bg-orb{position:fixed;border-radius:50%;filter:blur(100px);z-index:0;pointer-events:none;}
+    .orb1{width:600px;height:600px;background:rgba(124,58,237,0.1);top:-200px;right:-150px;}
+    .orb2{width:400px;height:400px;background:rgba(14,165,233,0.08);bottom:-100px;left:-100px;}
 
-    nav {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:18px 40px;
-      background:rgba(0,20,45,0.9);
-      border-bottom:1px solid rgba(0,200,255,0.12);
-      position:sticky; top:0; z-index:50;
-    }
-    .nav-brand { display:flex; align-items:center; gap:10px; font-size:16px; letter-spacing:4px; color:#00c8ff; }
-    .nav-links { display:flex; gap:8px; }
-    .nav-links a {
-      padding:8px 18px; border-radius:6px; font-size:11px; letter-spacing:3px;
-      color:rgba(0,200,255,0.6); text-decoration:none;
-      border:1px solid transparent; transition:all 0.2s;
-    }
-    .nav-links a:hover, .nav-links a.active { color:#00c8ff; border-color:rgba(0,200,255,0.3); background:rgba(0,200,255,0.07); }
-    .nav-right { display:flex; align-items:center; gap:16px; font-size:11px; letter-spacing:2px; color:rgba(0,200,255,0.4); }
-    .logout-btn {
-      padding:7px 16px; border-radius:6px; font-size:11px; letter-spacing:2px;
-      color:#ff4d6d; border:1px solid rgba(255,77,109,0.3); background:none;
-      cursor:pointer; font-family:'Courier New',monospace; transition:all 0.2s;
-    }
-    .logout-btn:hover { background:rgba(255,77,109,0.1); }
+    nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:rgba(6,9,24,0.8);border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:50;backdrop-filter:blur(20px);}
+    .nav-brand{display:flex;align-items:center;gap:10px;}
+    .nav-brand-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#2563eb);display:flex;align-items:center;justify-content:center;font-size:16px;}
+    .nav-brand span{font-size:15px;font-weight:700;color:#f1f5f9;}
+    .nav-links{display:flex;gap:4px;}
+    .nav-links a{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:rgba(148,163,184,0.7);text-decoration:none;transition:all 0.2s;}
+    .nav-links a:hover{color:#f1f5f9;background:rgba(255,255,255,0.06);}
+    .nav-links a.active{color:#a78bfa;background:rgba(124,58,237,0.12);}
+    .nav-right{display:flex;align-items:center;gap:12px;}
+    .nav-user{display:flex;align-items:center;gap:8px;}
+    .avatar-sm{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#2563eb);display:flex;align-items:center;justify-content:center;font-size:14px;}
+    .nav-name{font-size:13px;font-weight:500;color:#f1f5f9;}
+    .logout-btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:#f87171;background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.15);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+    .logout-btn:hover{background:rgba(248,113,113,0.15);}
 
-    main { max-width:700px; margin:0 auto; padding:50px 24px; }
+    main{max-width:860px;margin:0 auto;padding:48px 40px;position:relative;z-index:1;}
 
-    .page-header { margin-bottom:40px; }
-    .page-header h2 { font-size:22px; letter-spacing:5px; color:#00c8ff; text-transform:uppercase; }
-    .page-header p  { margin-top:8px; font-size:11px; letter-spacing:2px; color:rgba(0,200,255,0.4); }
+    .page-header{margin-bottom:36px;}
+    .page-header h2{font-size:26px;font-weight:700;color:#f1f5f9;}
+    .page-header p{font-size:14px;color:rgba(148,163,184,0.55);margin-top:6px;}
 
-    .card {
-      background:rgba(0,20,45,0.8);
-      border:1px solid rgba(0,200,255,0.15);
-      border-radius:16px; padding:40px;
-      position:relative;
-    }
-    .card::before {
-      content:''; position:absolute; top:-1px; left:20%; right:20%;
-      height:2px;
-      background:linear-gradient(90deg, transparent, #00c8ff, transparent);
-    }
+    .profile-layout{display:grid;grid-template-columns:260px 1fr;gap:24px;}
 
-    .avatar-row {
-      display:flex; align-items:center; gap:24px; margin-bottom:36px;
-      padding-bottom:28px; border-bottom:1px solid rgba(0,200,255,0.1);
+    /* ── Left panel ── */
+    .left-panel{display:flex;flex-direction:column;gap:16px;}
+    .avatar-card{
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+      border-radius:20px;padding:28px 24px;text-align:center;
     }
-    .avatar {
-      width:80px; height:80px; border-radius:50%;
-      background:linear-gradient(135deg, #005a8e, #007abf);
-      border:2px solid rgba(0,200,255,0.3);
-      display:flex; align-items:center; justify-content:center; font-size:36px;
+    .avatar-circle{
+      width:80px;height:80px;border-radius:20px;margin:0 auto 16px;
+      background:linear-gradient(135deg,#7c3aed,#2563eb);
+      display:flex;align-items:center;justify-content:center;
+      font-size:38px;cursor:pointer;transition:transform 0.2s;
+      box-shadow:0 8px 24px rgba(124,58,237,0.35);
     }
-    .avatar-info h3 { font-size:16px; letter-spacing:3px; color:#00c8ff; }
-    .avatar-info p  { font-size:11px; letter-spacing:2px; color:rgba(0,200,255,0.4); margin-top:4px; }
-
-    .section-title {
-      font-size:10px; letter-spacing:4px; color:rgba(0,200,255,0.4);
-      margin-bottom:20px; margin-top:32px; text-transform:uppercase;
+    .avatar-circle:hover{transform:scale(1.05);}
+    .avatar-name{font-size:16px;font-weight:700;color:#f1f5f9;margin-bottom:4px;}
+    .avatar-callsign{font-size:12px;color:#a78bfa;}
+    .avatar-badge{
+      display:inline-block;margin-top:10px;padding:4px 12px;border-radius:20px;
+      font-size:11px;font-weight:600;background:rgba(16,185,129,0.12);
+      border:1px solid rgba(16,185,129,0.25);color:#10b981;
     }
 
-    .field { margin-bottom:20px; }
-    label {
-      display:block; font-size:10px; letter-spacing:3px;
-      color:rgba(0,200,255,0.5); margin-bottom:8px; text-transform:uppercase;
+    /* Avatar picker */
+    .emoji-picker{
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+      border-radius:16px;padding:16px;
     }
-    input, select {
-      width:100%;
-      background:rgba(0,30,60,0.6);
-      border:1px solid rgba(0,200,255,0.15);
-      border-radius:8px; padding:12px 16px;
-      color:#e0f4ff; font-family:'Courier New',monospace;
-      font-size:14px; outline:none; transition:border-color 0.3s, box-shadow 0.3s;
+    .emoji-picker p{font-size:11px;font-weight:600;color:rgba(148,163,184,0.5);letter-spacing:0.5px;margin-bottom:10px;text-transform:uppercase;}
+    .emoji-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+    .emoji-opt{
+      height:38px;border-radius:8px;background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;
+      justify-content:center;font-size:18px;cursor:pointer;transition:all 0.2s;
     }
-    input:focus, select:focus {
-      border-color:rgba(0,200,255,0.5);
-      box-shadow:0 0 12px rgba(0,200,255,0.1);
-    }
-    select option { background:#021428; }
+    .emoji-opt:hover,.emoji-opt.selected{background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.35);}
 
-    .row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .stats-mini{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:16px;}
+    .stats-mini p{font-size:11px;font-weight:600;color:rgba(148,163,184,0.5);letter-spacing:0.5px;margin-bottom:12px;text-transform:uppercase;}
+    .mini-stat{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .mini-stat:last-child{border-bottom:none;}
+    .mini-stat span:first-child{font-size:12px;color:rgba(148,163,184,0.6);}
+    .mini-stat span:last-child{font-size:13px;font-weight:600;color:#f1f5f9;}
 
-    .btn-row { display:flex; gap:12px; margin-top:32px; }
-    .btn {
-      flex:1; padding:13px; border-radius:8px;
-      font-family:'Courier New',monospace; font-size:12px; letter-spacing:3px;
-      cursor:pointer; transition:all 0.3s; text-transform:uppercase;
-    }
-    .btn-primary {
-      background:linear-gradient(135deg,#005a8e,#007abf);
-      border:1px solid rgba(0,200,255,0.3); color:#e0f4ff;
-    }
-    .btn-primary:hover { background:linear-gradient(135deg,#007abf,#00a0e0); box-shadow:0 0 20px rgba(0,160,220,0.3); }
-    .btn-secondary {
-      background:transparent;
-      border:1px solid rgba(0,200,255,0.2); color:rgba(0,200,255,0.6);
-    }
-    .btn-secondary:hover { border-color:rgba(0,200,255,0.4); color:#00c8ff; }
+    /* ── Right panel ── */
+    .form-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:32px;}
+    .section-label{font-size:11px;font-weight:600;color:rgba(148,163,184,0.5);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.05);}
+    .section-label:not(:first-child){margin-top:28px;}
 
-    .toast {
-      position:fixed; bottom:30px; right:30px;
-      background:rgba(0,255,150,0.1); border:1px solid rgba(0,255,150,0.3);
-      border-radius:10px; padding:14px 24px;
-      font-size:12px; letter-spacing:2px; color:#00ff96;
-      transform:translateY(80px); opacity:0; transition:all 0.4s;
-      z-index:999;
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .field{margin-bottom:16px;}
+    label{display:block;font-size:12px;font-weight:500;color:rgba(148,163,184,0.7);margin-bottom:7px;}
+    input,select,textarea{
+      width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);
+      border-radius:10px;padding:11px 14px;color:#f1f5f9;
+      font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:all 0.2s;
     }
-    .toast.show { transform:translateY(0); opacity:1; }
+    input:focus,select:focus,textarea:focus{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.05);box-shadow:0 0 0 3px rgba(124,58,237,0.1);}
+    input::placeholder,textarea::placeholder{color:rgba(100,116,139,0.45);}
+    select option{background:#0d1224;}
+    textarea{resize:vertical;min-height:80px;line-height:1.6;}
+
+    .btn-row{display:flex;gap:10px;margin-top:24px;}
+    .btn-primary{
+      flex:1;padding:12px;border-radius:10px;
+      background:linear-gradient(135deg,#7c3aed,#2563eb);border:none;
+      color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+      cursor:pointer;transition:all 0.3s;
+    }
+    .btn-primary:hover{opacity:0.9;box-shadow:0 6px 20px rgba(124,58,237,0.35);transform:translateY(-1px);}
+    .btn-secondary{
+      padding:12px 24px;border-radius:10px;background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);color:rgba(148,163,184,0.7);
+      font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;
+    }
+    .btn-secondary:hover{background:rgba(255,255,255,0.08);color:#f1f5f9;}
+
+    .toast{
+      position:fixed;bottom:28px;right:28px;
+      background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);
+      border-radius:12px;padding:14px 20px;
+      font-size:13px;font-weight:500;color:#10b981;
+      display:flex;align-items:center;gap:8px;
+      transform:translateY(80px);opacity:0;transition:all 0.4s;z-index:999;
+    }
+    .toast.show{transform:translateY(0);opacity:1;}
   </style>
 </head>
 <body>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
 
 <nav>
-  <div class="nav-brand">🛸 ORBITAL COMMAND</div>
+  <div class="nav-brand">
+    <div class="nav-brand-icon">🛸</div>
+    <span>Orbital Command</span>
+  </div>
   <div class="nav-links">
-    <a href="dashboard.html">DASHBOARD</a>
-    <a href="profile.html" class="active">PROFILE</a>
-    <a href="shop.html">TELESCOPE SHOP</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="profile.html" class="active">Profile</a>
+    <a href="shop.html">Telescope Shop</a>
   </div>
   <div class="nav-right">
-    <span id="navUser"></span>
-    <button class="logout-btn" onclick="logout()">LOGOUT</button>
+    <div class="nav-user">
+      <div class="avatar-sm">👨‍🚀</div>
+      <span class="nav-name" id="navUser"></span>
+    </div>
+    <button class="logout-btn" onclick="logout()">Sign Out</button>
   </div>
 </nav>
 
 <main>
   <div class="page-header">
-    <h2>👨‍🚀 Commander Profile</h2>
-    <p>UPDATE YOUR PERSONAL DETAILS AND MISSION PREFERENCES</p>
+    <h2>Commander Profile</h2>
+    <p>Manage your personal details, preferences, and mission settings</p>
   </div>
 
-  <div class="card">
-    <div class="avatar-row">
-      <div class="avatar">👨‍🚀</div>
-      <div class="avatar-info">
-        <h3 id="displayName">COMMANDER</h3>
-        <p id="displayCallsign">CALLSIGN: —</p>
+  <div class="profile-layout">
+    <!-- Left -->
+    <div class="left-panel">
+      <div class="avatar-card">
+        <div class="avatar-circle" id="avatarDisplay" onclick="document.querySelector('.emoji-picker').scrollIntoView({behavior:'smooth'})">👨‍🚀</div>
+        <div class="avatar-name" id="displayName">Commander</div>
+        <div class="avatar-callsign" id="displayCallsign">Callsign: —</div>
+        <div class="avatar-badge">Alpha Clearance</div>
+      </div>
+
+      <div class="emoji-picker">
+        <p>Choose Avatar</p>
+        <div class="emoji-grid" id="emojiGrid"></div>
+      </div>
+
+      <div class="stats-mini">
+        <p>Stats</p>
+        <div class="mini-stat"><span>Missions</span><span>247</span></div>
+        <div class="mini-stat"><span>Clearance</span><span>Alpha</span></div>
+        <div class="mini-stat"><span>Sector</span><span>Gamma-7</span></div>
+        <div class="mini-stat"><span>Rank</span><span>Commander</span></div>
       </div>
     </div>
 
-    <p class="section-title">Personal Information</p>
-    <div class="row">
-      <div class="field">
-        <label>First Name</label>
-        <input type="text" id="firstName" placeholder="e.g. Shpend"/>
+    <!-- Right -->
+    <div class="form-card">
+      <p class="section-label">Personal Information</p>
+      <div class="row">
+        <div class="field"><label>First Name</label><input type="text" id="firstName" placeholder="e.g. Shpend"/></div>
+        <div class="field"><label>Last Name</label><input type="text" id="lastName" placeholder="e.g. Pllana"/></div>
       </div>
-      <div class="field">
-        <label>Last Name</label>
-        <input type="text" id="lastName" placeholder="e.g. Llanaj"/>
-      </div>
-    </div>
-    <div class="field">
-      <label>Email Address</label>
-      <input type="email" id="email" placeholder="commander@orbital.space"/>
-    </div>
-    <div class="field">
-      <label>Callsign</label>
-      <input type="text" id="callsign" placeholder="Your mission callsign"/>
-    </div>
+      <div class="field"><label>Email Address</label><input type="email" id="email" placeholder="commander@orbital.space"/></div>
+      <div class="field"><label>Bio</label><textarea id="bio" placeholder="Tell your crew about yourself..."></textarea></div>
 
-    <p class="section-title">Mission Preferences</p>
-    <div class="row">
-      <div class="field">
-        <label>Home Station</label>
-        <select id="station">
-          <option value="">Select station</option>
-          <option value="ISS">International Space Station</option>
-          <option value="LUNA">Lunar Base Alpha</option>
-          <option value="MARS">Mars Outpost Ares</option>
-          <option value="DEEP">Deep Space Station 9</option>
-        </select>
+      <p class="section-label">Mission Settings</p>
+      <div class="field"><label>Callsign</label><input type="text" id="callsign" placeholder="Your unique mission callsign"/></div>
+      <div class="row">
+        <div class="field">
+          <label>Home Station</label>
+          <select id="station">
+            <option value="">Select station</option>
+            <option value="ISS">International Space Station</option>
+            <option value="LUNA">Lunar Base Alpha</option>
+            <option value="MARS">Mars Outpost Ares</option>
+            <option value="DEEP">Deep Space Station 9</option>
+            <option value="EUROPA">Europa Research Base</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Specialty</label>
+          <select id="specialty">
+            <option value="">Select specialty</option>
+            <option value="astro">Astrophysics</option>
+            <option value="nav">Navigation</option>
+            <option value="eng">Engineering</option>
+            <option value="bio">Astrobiology</option>
+            <option value="ops">Operations</option>
+            <option value="sec">Security</option>
+          </select>
+        </div>
       </div>
-      <div class="field">
-        <label>Specialty</label>
-        <select id="specialty">
-          <option value="">Select specialty</option>
-          <option value="astro">Astrophysics</option>
-          <option value="nav">Navigation</option>
-          <option value="eng">Engineering</option>
-          <option value="bio">Astrobiology</option>
-          <option value="ops">Operations</option>
-        </select>
-      </div>
-    </div>
 
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="resetForm()">RESET</button>
-      <button class="btn btn-primary" onclick="saveProfile()">SAVE CHANGES</button>
+      <p class="section-label">Notification Preferences</p>
+      <div class="row">
+        <div class="field">
+          <label>Mission Alerts</label>
+          <select id="alerts">
+            <option value="all">All alerts</option>
+            <option value="critical">Critical only</option>
+            <option value="none">None</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Time Zone</label>
+          <select id="timezone">
+            <option value="UTC">UTC (Universal)</option>
+            <option value="EST">EST (Eastern)</option>
+            <option value="PST">PST (Pacific)</option>
+            <option value="GMT">GMT (Greenwich)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="resetForm()">Reset</button>
+        <button class="btn-primary" onclick="saveProfile()">Save Changes</button>
+      </div>
     </div>
   </div>
 </main>
 
-<div class="toast" id="toast">✓ PROFILE UPDATED SUCCESSFULLY</div>
+<div class="toast" id="toast">✓ Profile saved successfully</div>
 
 <script>
-  const commander = localStorage.getItem('commander');
-  if (!commander) window.location.href = 'index.html';
-  document.getElementById('navUser').textContent = commander.toUpperCase();
+  const EMOJIS=['👨‍🚀','👩‍🚀','🧑‍🚀','🤖','👽','🦾','🧬','🌟','🪐','🌌','⚡','🔭'];
+  const commander=localStorage.getItem('commander');
+  if(!commander)window.location.href='index.html';
+  document.getElementById('navUser').textContent=commander.charAt(0).toUpperCase()+commander.slice(1);
 
-  // Load saved profile
-  const saved = JSON.parse(localStorage.getItem('profile_' + commander) || '{}');
-  const fields = ['firstName','lastName','email','callsign','station','specialty'];
-  fields.forEach(f => { if (saved[f]) document.getElementById(f).value = saved[f]; });
+  const saved=JSON.parse(localStorage.getItem('profile_'+commander)||'{}');
+  const fields=['firstName','lastName','email','callsign','station','specialty','bio','alerts','timezone'];
+  fields.forEach(f=>{if(saved[f]&&document.getElementById(f))document.getElementById(f).value=saved[f];});
+
+  let selectedEmoji=saved.avatar||'👨‍🚀';
+  document.getElementById('avatarDisplay').textContent=selectedEmoji;
+
+  // Build emoji grid
+  const grid=document.getElementById('emojiGrid');
+  EMOJIS.forEach(e=>{
+    const d=document.createElement('div');
+    d.className='emoji-opt'+(e===selectedEmoji?' selected':'');
+    d.textContent=e;
+    d.onclick=()=>{
+      selectedEmoji=e;
+      document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('selected'));
+      d.classList.add('selected');
+      document.getElementById('avatarDisplay').textContent=e;
+    };
+    grid.appendChild(d);
+  });
+
   updateDisplay();
 
-  function updateDisplay() {
-    const fn = document.getElementById('firstName').value;
-    const ln = document.getElementById('lastName').value;
-    const cs = document.getElementById('callsign').value;
-    document.getElementById('displayName').textContent =
-      (fn || ln) ? (fn + ' ' + ln).trim().toUpperCase() : commander.toUpperCase();
-    document.getElementById('displayCallsign').textContent =
-      'CALLSIGN: ' + (cs || '—').toUpperCase();
+  function updateDisplay(){
+    const fn=document.getElementById('firstName').value;
+    const ln=document.getElementById('lastName').value;
+    const cs=document.getElementById('callsign').value;
+    document.getElementById('displayName').textContent=(fn||ln)?(fn+' '+ln).trim():(commander.charAt(0).toUpperCase()+commander.slice(1));
+    document.getElementById('displayCallsign').textContent='Callsign: '+(cs||'—');
   }
 
-  document.querySelectorAll('input').forEach(i => i.addEventListener('input', updateDisplay));
+  document.querySelectorAll('input,select,textarea').forEach(i=>i.addEventListener('input',updateDisplay));
 
-  function saveProfile() {
-    const data = {};
-    fields.forEach(f => data[f] = document.getElementById(f).value);
-    localStorage.setItem('profile_' + commander, JSON.stringify(data));
+  function saveProfile(){
+    const data={avatar:selectedEmoji};
+    fields.forEach(f=>{if(document.getElementById(f))data[f]=document.getElementById(f).value;});
+    localStorage.setItem('profile_'+commander,JSON.stringify(data));
     updateDisplay();
-    const toast = document.getElementById('toast');
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3000);
+    const t=document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),3000);
   }
 
-  function resetForm() {
-    fields.forEach(f => document.getElementById(f).value = '');
+  function resetForm(){
+    fields.forEach(f=>{if(document.getElementById(f))document.getElementById(f).value='';});
     updateDisplay();
   }
 
-  function logout() {
-    localStorage.removeItem('commander');
-    window.location.href = 'index.html';
-  }
+  function logout(){localStorage.removeItem('commander');window.location.href='index.html';}
 </script>
 </body>
 </html>
